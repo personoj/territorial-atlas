@@ -1,0 +1,245 @@
+.search-control {
+  position: fixed;
+  top: 22px;
+  left: 24px;
+  width: 270px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 249, 0.97);
+  box-shadow: 0 3px 16px #233f3320;
+  border: 1px solid #ced8c5;
+  border-radius: 7px;
+  z-index: 2;
+}
+.search-control > svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #7e907c;
+  stroke-width: 1.5;
+  margin: 0 12px 0 15px;
+}
+.search-control input {
+  width: 190px;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font-size: 13px;
+  color: #354a3e;
+}
+.search-control input::placeholder {
+  color: #84917d;
+}
+.search-control > button {
+  background: none;
+  border: 0;
+  font-size: 21px;
+  margin-left: auto;
+  margin-right: 8px;
+}
+#place-results {
+  position: absolute;
+  top: 51px;
+  left: 0;
+  width: 100%;
+  max-height: 370px;
+  overflow: auto;
+  padding: 6px;
+  background: #fffffa;
+  border: 1px solid #d9e0d1;
+  border-radius: 7px;
+  box-shadow: 0 8px 22px #233f3320;
+}
+#place-results button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+#place-results button:hover,
+#place-results button:focus {
+  background: #eef3e7;
+}
+#place-results small {
+  font-size: 11px;
+  color: #8d9989;
+}
+.empty-result {
+  font-size: 12px;
+  color: #7d8977;
+  padding: 13px;
+}
+.map-tools {
+  position: fixed;
+  right: 23px;
+  top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px;
+  background: rgba(255, 255, 249, 0.96);
+  border: 1px solid #ced8c5;
+  border-radius: 7px;
+  box-shadow: 0 3px 16px #233f3320;
+  z-index: 2;
+}
+.map-tools button {
+  border: 0;
+  background: none;
+  width: 37px;
+  height: 39px;
+  font-size: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+}
+.map-tools button:hover,
+.map-tools button[aria-expanded="true"] {
+  background: #e7eedf;
+  color: #244b36;
+}
+.map-tools svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.tool-divider {
+  height: 1px;
+  background: #e0e6d9;
+  width: 24px;
+  margin: 4px;
+}
+.floating-panel {
+  position: fixed;
+  right: 78px;
+  top: 22px;
+  width: 252px;
+  border: 1px solid #cbd6c2;
+  border-radius: 8px;
+  padding: 15px 18px;
+  background: rgba(255, 255, 249, 0.98);
+  box-shadow: 0 8px 28px #233f3320;
+  z-index: 3;
+}
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.panel-heading button {
+  border: 0;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+}
+.floating-panel label {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 12px;
+  margin: 14px 0;
+}
+.floating-panel input {
+  accent-color: #456c48;
+  width: 14px;
+  height: 14px;
+}
+.variant-tabs {
+  display: flex;
+  margin-top: 20px;
+  padding: 3px;
+  background: #edf1e6;
+  border-radius: 5px;
+}
+.variant-tabs button {
+  width: 50%;
+  background: none;
+  border: 0;
+  border-radius: 3px;
+  padding: 8px 0;
+  font-size: 12px;
+}
+.variant-tabs button[aria-pressed="true"] {
+  background: #fffffa;
+  box-shadow: 0 1px 3px #384d3120;
+  color: #31533b;
+}
+.map-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 17px;
+  font-size: 11px;
+  color: #75826b;
+}
+.map-legend span {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.capital-symbol {
+  font-size: 15px;
+  color: #52694a;
+  font-style: normal;
+}
+.city-symbol {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #435a45;
+  border: 1px solid #fffeed;
+}
+.layer-note {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #8b9481;
+  margin-bottom: 0;
+}
+@media (max-width: 600px) {
+  .search-control {
+    left: 14px;
+    top: 14px;
+    width: 220px;
+  }
+  .search-control input {
+    width: 156px;
+  }
+  .map-tools {
+    right: 14px;
+    top: 14px;
+  }
+  .floating-panel {
+    right: 66px;
+    top: 14px;
+    width: 234px;
+  }
+  #gesture-hint {
+    bottom: 68px;
+    width: max-content;
+    max-width: 90%;
+    font-size: 10px;
+  }
+  .bottom-info {
+    right: 14px;
+    bottom: 14px;
+  }
+  .ol-scale-line {
+    left: 14px;
+    bottom: 14px;
+  }
+}

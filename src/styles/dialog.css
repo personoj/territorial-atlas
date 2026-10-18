@@ -1,0 +1,33 @@
+dialog {
+  border: 1px solid #cbd6c2;
+  border-radius: 9px;
+  max-width: 460px;
+  padding: 30px 32px;
+  color: #465a45;
+  background: #fffff9;
+  box-shadow: 0 20px 90px #18291825;
+}
+dialog::backdrop {
+  background: #283a2733;
+}
+dialog h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 0;
+}
+dialog p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #7b8671;
+}
+dialog a {
+  color: #526f50;
+}
+.dialog-close {
+  position: absolute;
+  right: 12px;
+  top: 9px;
+  border: 0;
+  background: none;
+  font-size: 25px;
+}

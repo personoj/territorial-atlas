@@ -1,0 +1,37 @@
+灰绿山水 — 地图资料与署名
+
+地图生成纹理是 imagegen 视觉示意；不是权威地形、规划分类或测量资料。
+行政分区、陆地轮廓和标签独立于纹理，来源如下。
+
+1. 全国省域及大多数市县行政分区：DataV.GeoAtlas 公开展示数据。
+https://datav.aliyun.com/portal/school/atlas/area_selector
+https://geo.datav.aliyun.com/areas_v3/bound/
+采用与湖北样板相同的近似 GCJ-02 逆转换，并修复无效多边形；并非测绘级坐标转换。
+
+2. 台湾县市、乡镇市区：国土测绘中心开放资料，TWD97 (EPSG:3824) 转为 WGS84。
+https://maps.nlsc.gov.tw/pro/download.jsp
+https://data.gov.tw/dataset/7441
+保留来源代码。部分地点以区域内部点作标签定位，不代表市政府或乡镇公所精确驻地。
+
+3. 香港陆地轮廓：详细行政区面扣除地政总署 iB50000 HYDRPOLY 海面（TYPE=SEF）。
+© 香港特别行政区政府，地政总署。经 DATA.GOV.HK 提供。
+https://portal.csdi.gov.hk/server/rest/services/common/landsd_rcd_1637221775627_85634/FeatureServer/7
+https://data.gov.hk/en/terms-and-conditions
+本应用不是政府网站，也不表示获政府认可。
+
+4. 澳门、海南主岛/近岸海岸线：© OpenStreetMap contributors，经 Geofabrik 提供。
+https://www.openstreetmap.org/copyright
+https://download.geofabrik.de/asia/china.html
+OpenStreetMap 数据按 Open Database License (ODbL) 提供：
+https://opendatacommons.org/licenses/odbl/1-0/
+涉及 OSM 海岸线的派生几何包含于 provinces.geojson、country-context.geojson，以及按陆地裁切显示的 macau-cities.geojson；保留以上署名及对应数据许可。
+海南远岛保持全国原始几何与坐标，不移入主岛旁制作插图。
+
+5. 地形位置参考：Mapzen Terrain Tiles；水系及世界地理背景参考：Natural Earth。
+https://registry.opendata.aws/terrain-tiles/
+https://github.com/tilezen/joerd/blob/master/docs/attribution.md
+https://www.naturalearthdata.com/about/terms-of-use/
+
+原始纹理在本地制作流程中保留；公开运行图经过仿射定位、地理边界透明裁切及尺寸重采样。
+港澳主分区显示面按陆地轮廓裁切，避免把行政海面涂成陆地；没有分区覆盖的陆地保留纹理和省界，不推断所属分区。
+图层的小岛、海湾细节受生成分辨率与边界来源概化程度影响。来源及近似处理不构成权威行政或规划认定。

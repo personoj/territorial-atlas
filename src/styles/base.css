@@ -1,0 +1,32 @@
+:root {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #354a3e;
+  background: #f2f3e9;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  color: inherit;
+}
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #477857;
+  outline-offset: 3px;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+[hidden] {
+  display: none !important;
+}

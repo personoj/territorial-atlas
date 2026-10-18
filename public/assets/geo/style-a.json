@@ -1,0 +1,122 @@
+{
+  "name": "A · 灰绿山水",
+  "provinceExtent": [
+    12059011.330382545,
+    3376070.6652996643,
+    12931310.697172977,
+    3935895.4604602964
+  ],
+  "chinaExtent": [
+    8140023.688314296,
+    383674.81389056146,
+    15079509.483611906,
+    7128815.068805873
+  ],
+  "provinceSize": [
+    3072,
+    2048
+  ],
+  "chinaSize": [
+    2600,
+    2452
+  ],
+  "worldSize": [
+    1536,
+    1536
+  ],
+  "transitionZoom": [
+    5.6,
+    7.0
+  ],
+  "demZoom": 9,
+  "demTiles": 96,
+  "nominalMercatorPixelMeters": 305.748113140705,
+  "approxGroundPixelMeters": 262.07728483558213,
+  "interpretation": "Imagegen A-style transparent artistic map textures, registered against geographic outlines. Terrain and hydrology are illustrative, not authoritative GIS data.",
+  "sources": {
+    "elevation": "https://registry.opendata.aws/terrain-tiles/",
+    "overview": "https://www.naturalearthdata.com/downloads/10m-raster-data/10m-natural-earth-1/",
+    "lakes": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_10m_lakes.geojson"
+  },
+  "generated": true,
+  "generatedRegistration": {
+    "china": {
+      "sourceSize": [
+        1272,
+        1236
+      ],
+      "guideSize": [
+        2026,
+        1969
+      ],
+      "runtimeSize": [
+        1800,
+        1749
+      ],
+      "sourceTransparentFraction": 0.639985447070078,
+      "affineInGuidePixels": [
+        [
+          0.9996251761220404,
+          -0.001224153492061475
+        ],
+        [
+          0.00042359493958001233,
+          0.9943773062772605
+        ],
+        [
+          -0.09145951056308047,
+          2.32499814057787
+        ]
+      ],
+      "outlineResidualPixelsP50P95": [
+        1.2416951883593592,
+        3.3379924973465167
+      ],
+      "extent": [
+        8140023.688314296,
+        383674.81389056146,
+        15079509.483611906,
+        7128815.068805873
+      ]
+    },
+    "hubei": {
+      "sourceSize": [
+        1565,
+        1005
+      ],
+      "guideSize": [
+        2853,
+        1831
+      ],
+      "runtimeSize": [
+        1800,
+        1155
+      ],
+      "sourceTransparentFraction": 0.4536505968559757,
+      "affineInGuidePixels": [
+        [
+          1.0003059590882128,
+          -0.00012618211923624565
+        ],
+        [
+          0.00040849472308579265,
+          1.0002299173917886
+        ],
+        [
+          -1.6377123812813033,
+          -0.9758680265076287
+        ]
+      ],
+      "outlineResidualPixelsP50P95": [
+        0.8603123105389892,
+        2.135937937598732
+      ],
+      "extent": [
+        12059011.330382545,
+        3376070.6652996643,
+        12931310.697172977,
+        3935895.4604602964
+      ]
+    }
+  }
+}

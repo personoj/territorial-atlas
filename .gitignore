@@ -1,0 +1,33 @@
+node_modules/
+/dist/
+*.tsbuildinfo
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+/work/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+
+# Local authoring, verification, and project working records.
+/tools/
+/qa/
+/docs/
+/.openai/
+/AGENTS.md
+/DATA-SOURCES.md
+
+# Authoring inputs live in ignored work/authoring-assets, never in public/.
+
+# Archived prototypes and unused reference layers stay local.
+/legacy.html
+/embed.html
+/src/legacy/
+/src/styles/legacy-*.css
+/public/assets/legacy/
+/public/assets/geo/lakes.geojson
+/public/assets/geo/rivers.geojson

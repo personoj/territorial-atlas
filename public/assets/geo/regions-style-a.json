@@ -1,0 +1,1043 @@
+{
+  "version": 2,
+  "placeIndex": "places-style-a.json",
+  "regions": [
+    {
+      "id": "hubei",
+      "name": "湖北",
+      "adcode": 420000,
+      "capitalAdcode": 420100,
+      "capitalCenter": [
+        114.29313688023267,
+        30.586779125965926
+      ],
+      "image": "hubei-style-a-imagegen.webp",
+      "extent": [
+        12059011.330382545,
+        3376070.6652996643,
+        12931310.697172977,
+        3935895.4604602964
+      ],
+      "cities": "hubei-cities.geojson",
+      "counties": "hubei-counties.geojson",
+      "subdivisionLabel": "城市",
+      "transitionZoom": [
+        5.6,
+        7
+      ],
+      "contextImage": "hubei-style-a-context.webp",
+      "neighbors": [
+        "anhui",
+        "chongqing",
+        "henan",
+        "hunan",
+        "jiangxi",
+        "shaanxi"
+      ]
+    },
+    {
+      "id": "shaanxi",
+      "name": "陕西",
+      "adcode": 610000,
+      "capitalAdcode": 610100,
+      "capitalCenter": [
+        108.9433513187207,
+        34.26473629573584
+      ],
+      "image": "shaanxi-style-a-imagegen.webp",
+      "extent": [
+        11738074.274716094,
+        3719888.5848400854,
+        12388533.749511398,
+        4810981.897399953
+      ],
+      "cities": "shaanxi-cities.geojson",
+      "counties": "shaanxi-counties.geojson",
+      "subdivisionLabel": "城市",
+      "transitionZoom": [
+        5.6,
+        7
+      ],
+      "contextImage": "shaanxi-style-a-context.webp",
+      "neighbors": [
+        "chongqing",
+        "gansu",
+        "henan",
+        "hubei",
+        "inner-mongolia",
+        "ningxia",
+        "shanxi",
+        "sichuan"
+      ]
+    },
+    {
+      "id": "henan",
+      "name": "河南",
+      "adcode": 410000,
+      "capitalAdcode": 410100,
+      "capitalCenter": [
+        113.65930761087729,
+        34.75908237217811
+      ],
+      "image": "henan-style-a-imagegen.webp",
+      "extent": [
+        12281440.853288481,
+        3679681.952183636,
+        12987358.298019236,
+        4354376.125320531
+      ],
+      "cities": "henan-cities.geojson",
+      "counties": "henan-counties.geojson",
+      "subdivisionLabel": "城市",
+      "transitionZoom": [
+        5.6,
+        7
+      ],
+      "contextImage": "henan-style-a-context.webp",
+      "neighbors": [
+        "anhui",
+        "hebei",
+        "hubei",
+        "shaanxi",
+        "shandong",
+        "shanxi",
+        "jiangsu"
+      ]
+    },
+    {
+      "id": "anhui",
+      "name": "安徽",
+      "adcode": 340000,
+      "capitalAdcode": 340100,
+      "capitalCenter": [
+        117.2775208482752,
+        31.8631857705959
+      ],
+      "image": "anhui-style-a-imagegen.webp",
+      "extent": [
+        12784812.379018813,
+        3423191.4489248223,
+        13322057.218097895,
+        4119868.048229367
+      ],
+      "cities": "anhui-cities.geojson",
+      "counties": "anhui-counties.geojson",
+      "subdivisionLabel": "城市",
+      "transitionZoom": [
+        5.6,
+        7
+      ],
+      "contextImage": "anhui-style-a-context.webp",
+      "neighbors": [
+        "henan",
+        "hubei",
+        "jiangsu",
+        "jiangxi",
+        "shandong",
+        "zhejiang"
+      ]
+    },
+    {
+      "id": "chongqing",
+      "name": "重庆",
+      "adcode": 500000,
+      "capitalAdcode": 500000,
+      "capitalCenter": [
+        106.50112907878368,
+        29.5358926641024
+      ],
+      "image": "chongqing-style-a-imagegen.webp",
+      "extent": [
+        11718638.739261735,
+        3267332.696759888,
+        12269394.978804883,
+        3792669.4175548917
+      ],
+      "cities": "chongqing-cities.geojson",
+      "counties": "chongqing-counties.geojson",
+      "subdivisionLabel": "区县",
+      "transitionZoom": [
+        5.6,
+        7
+      ],
+      "contextImage": "chongqing-style-a-context.webp",
+      "neighbors": [
+        "guizhou",
+        "hubei",
+        "hunan",
+        "shaanxi",
+        "sichuan"
+      ]
+    },
+    {
+      "id": "hunan",
+      "name": "湖南",
+      "adcode": 430000,
+      "capitalAdcode": 430100,
+      "capitalCenter": [
+        112.97670239489399,
+        28.197494210266946
+      ],
+      "image": "hunan-style-a-imagegen.webp",
+      "extent": [
+        12106791.400976261,
+        2828447.322583528,
+        12721264.50649388,
+        3523371.234869654
+      ],
+      "cities": "hunan-cities.geojson",
+      "counties": "hunan-counties.geojson",
+      "subdivisionLabel": "城市",
+      "transitionZoom": [
+        5.6,
+        7
+      ],
+      "contextImage": "hunan-style-a-context.webp",
+      "neighbors": [
+        "chongqing",
+        "guangdong",
+        "guangxi",
+        "guizhou",
+        "hubei",
+        "jiangxi"
+      ]
+    },
+    {
+      "id": "jiangxi",
+      "name": "江西",
+      "adcode": 360000,
+      "capitalAdcode": 360100,
+      "capitalCenter": [
+        115.88730544145511,
+        28.679861699393648
+      ],
+      "image": "jiangxi-style-a-imagegen.webp",
+      "extent": [
+        12639565.46702953,
+        2809834.772963716,
+        13191983.927375209,
+        3517017.440072904
+      ],
+      "cities": "jiangxi-cities.geojson",
+      "counties": "jiangxi-counties.geojson",
+      "subdivisionLabel": "城市",
+      "transitionZoom": [
+        5.6,
+        7
+      ],
+      "contextImage": "jiangxi-style-a-context.webp",
+      "neighbors": [
+        "anhui",
+        "fujian",
+        "guangdong",
+        "hubei",
+        "hunan",
+        "zhejiang"
+      ]
+    },
+    {
+      "id": "sichuan",
+      "name": "四川",
+      "adcode": 510000,
+      "capitalAdcode": 510100,
+      "capitalCenter": [
+        104.06322753607961,
+        30.66188282140012
+      ],
+      "capitalName": "成都市",
+      "image": "sichuan-style-a-imagegen.webp",
+      "extent": [
+        10830832.091868712,
+        2999209.2227961114,
+        12088705.390736485,
+        4077109.8804412633
+      ],
+      "cities": "sichuan-cities.geojson",
+      "counties": "sichuan-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "sichuan-style-a-context.webp",
+      "neighbors": [
+        "chongqing",
+        "gansu",
+        "guizhou",
+        "qinghai",
+        "shaanxi",
+        "tibet",
+        "yunnan"
+      ]
+    },
+    {
+      "id": "guizhou",
+      "name": "贵州",
+      "adcode": 520000,
+      "capitalAdcode": 520100,
+      "capitalCenter": [
+        106.70970595888285,
+        26.58186520644337
+      ],
+      "capitalName": "贵阳市",
+      "image": "guizhou-style-a-imagegen.webp",
+      "extent": [
+        11529546.710584061,
+        2826086.9969864246,
+        12202901.239672517,
+        3406984.769580813
+      ],
+      "cities": "guizhou-cities.geojson",
+      "counties": "guizhou-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "guizhou-style-a-context.webp",
+      "neighbors": [
+        "chongqing",
+        "guangxi",
+        "hunan",
+        "sichuan",
+        "yunnan"
+      ]
+    },
+    {
+      "id": "yunnan",
+      "name": "云南",
+      "adcode": 530000,
+      "capitalAdcode": 530100,
+      "capitalCenter": [
+        102.71080946742259,
+        25.04358171074637
+      ],
+      "capitalName": "昆明市",
+      "image": "yunnan-style-a-imagegen.webp",
+      "extent": [
+        10851994.868789582,
+        2404994.887125848,
+        11825703.495222772,
+        3408818.213345632
+      ],
+      "cities": "yunnan-cities.geojson",
+      "counties": "yunnan-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "yunnan-style-a-context.webp",
+      "neighbors": [
+        "guangxi",
+        "guizhou",
+        "sichuan",
+        "tibet"
+      ]
+    },
+    {
+      "id": "guangxi",
+      "name": "广西",
+      "adcode": 450000,
+      "capitalAdcode": 450100,
+      "capitalCenter": [
+        108.31601543364846,
+        22.82678507135447
+      ],
+      "capitalName": "南宁市",
+      "image": "guangxi-style-a-imagegen.webp",
+      "extent": [
+        11627555.237773973,
+        2389906.447114976,
+        12477728.570828598,
+        3051406.6981801707
+      ],
+      "cities": "guangxi-cities.geojson",
+      "counties": "guangxi-counties.geojson",
+      "subdivisionLabel": "城市",
+      "capitalKind": "自治区首府",
+      "contextImage": "guangxi-style-a-context.webp",
+      "neighbors": [
+        "guangdong",
+        "guizhou",
+        "hunan",
+        "yunnan"
+      ]
+    },
+    {
+      "id": "guangdong",
+      "name": "广东",
+      "adcode": 440000,
+      "capitalAdcode": 440100,
+      "capitalCenter": [
+        113.27529199178767,
+        23.127842732785624
+      ],
+      "capitalName": "广州市",
+      "image": "guangdong-style-a-imagegen.webp",
+      "extent": [
+        12202427.624627775,
+        2294349.127000965,
+        13049207.686856842,
+        2943438.6131634777
+      ],
+      "cities": "guangdong-cities.geojson",
+      "counties": "guangdong-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "guangdong-style-a-context.webp",
+      "neighbors": [
+        "fujian",
+        "guangxi",
+        "hong-kong",
+        "hunan",
+        "jiangxi",
+        "macau",
+        "hainan"
+      ]
+    },
+    {
+      "id": "fujian",
+      "name": "福建",
+      "adcode": 350000,
+      "capitalAdcode": 350100,
+      "capitalCenter": [
+        119.30142291686579,
+        26.078388614237408
+      ],
+      "capitalName": "福州市",
+      "image": "fujian-style-a-imagegen.webp",
+      "extent": [
+        12893688.469727656,
+        2696272.203838608,
+        13412026.713557424,
+        3291536.9714876367
+      ],
+      "cities": "fujian-cities.geojson",
+      "counties": "fujian-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "fujian-style-a-context.webp",
+      "neighbors": [
+        "guangdong",
+        "jiangxi",
+        "zhejiang"
+      ]
+    },
+    {
+      "id": "zhejiang",
+      "name": "浙江",
+      "adcode": 330000,
+      "capitalAdcode": 330100,
+      "capitalCenter": [
+        120.14887601948591,
+        30.289783730682856
+      ],
+      "capitalName": "杭州市",
+      "image": "zhejiang-style-a-imagegen.webp",
+      "extent": [
+        13135736.694731003,
+        3138377.6144592487,
+        13676069.38757147,
+        3658759.561717916
+      ],
+      "cities": "zhejiang-cities.geojson",
+      "counties": "zhejiang-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "zhejiang-style-a-context.webp",
+      "neighbors": [
+        "anhui",
+        "fujian",
+        "jiangsu",
+        "jiangxi",
+        "shanghai"
+      ]
+    },
+    {
+      "id": "jiangsu",
+      "name": "江苏",
+      "adcode": 320000,
+      "capitalAdcode": 320100,
+      "capitalCenter": [
+        118.76219449229396,
+        32.04358286209601
+      ],
+      "capitalName": "南京市",
+      "image": "jiangsu-style-a-imagegen.webp",
+      "extent": [
+        12950014.56391082,
+        3598644.80907925,
+        13580625.550699398,
+        4183900.313356497
+      ],
+      "cities": "jiangsu-cities.geojson",
+      "counties": "jiangsu-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "jiangsu-style-a-context.webp",
+      "neighbors": [
+        "anhui",
+        "shandong",
+        "shanghai",
+        "zhejiang",
+        "henan"
+      ]
+    },
+    {
+      "id": "shandong",
+      "name": "山东",
+      "adcode": 370000,
+      "capitalAdcode": 370100,
+      "capitalCenter": [
+        116.99507579970528,
+        36.67553643204037
+      ],
+      "capitalName": "济南市",
+      "image": "shandong-style-a-imagegen.webp",
+      "extent": [
+        12776870.762169905,
+        4075801.4660228943,
+        13664020.579319611,
+        4636411.908167881
+      ],
+      "cities": "shandong-cities.geojson",
+      "counties": "shandong-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "shandong-style-a-context.webp",
+      "neighbors": [
+        "anhui",
+        "hebei",
+        "henan",
+        "jiangsu",
+        "tianjin",
+        "liaoning"
+      ]
+    },
+    {
+      "id": "hebei",
+      "name": "河北",
+      "adcode": 130000,
+      "capitalAdcode": 130100,
+      "capitalCenter": [
+        114.49643611622416,
+        38.044818851939745
+      ],
+      "capitalName": "石家庄市",
+      "image": "hebei-style-a-imagegen.webp",
+      "extent": [
+        12625658.290162973,
+        4303419.95830248,
+        13347961.867395088,
+        5258167.950576755
+      ],
+      "cities": "hebei-cities.geojson",
+      "counties": "hebei-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "hebei-style-a-context.webp",
+      "neighbors": [
+        "beijing",
+        "henan",
+        "inner-mongolia",
+        "liaoning",
+        "shandong",
+        "shanxi",
+        "tianjin"
+      ]
+    },
+    {
+      "id": "shanxi",
+      "name": "山西",
+      "adcode": 140000,
+      "capitalAdcode": 140100,
+      "capitalCenter": [
+        112.54295112043687,
+        37.8564872329559
+      ],
+      "capitalName": "太原市",
+      "image": "shanxi-style-a-imagegen.webp",
+      "extent": [
+        12266060.003676761,
+        4103549.5899506127,
+        12757138.193167474,
+        4977473.814916973
+      ],
+      "cities": "shanxi-cities.geojson",
+      "counties": "shanxi-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "shanxi-style-a-context.webp",
+      "neighbors": [
+        "hebei",
+        "henan",
+        "inner-mongolia",
+        "shaanxi"
+      ]
+    },
+    {
+      "id": "beijing",
+      "name": "北京",
+      "adcode": 110000,
+      "capitalAdcode": 110000,
+      "capitalCenter": [
+        116.39904202945837,
+        39.90358526843917
+      ],
+      "capitalName": "北京市",
+      "image": "beijing-style-a-imagegen.webp",
+      "extent": [
+        12847014.147878135,
+        4784006.579636584,
+        13082072.360469302,
+        5022179.359347041
+      ],
+      "cities": "beijing-cities.geojson",
+      "counties": "beijing-counties.geojson",
+      "subdivisionLabel": "区县",
+      "focusExtent": [
+        12848145.555084132,
+        4785105.838619863,
+        13080940.953263305,
+        5021080.100363762
+      ],
+      "contextImage": "beijing-style-a-context.webp",
+      "neighbors": [
+        "hebei",
+        "tianjin"
+      ]
+    },
+    {
+      "id": "tianjin",
+      "name": "天津",
+      "adcode": 120000,
+      "capitalAdcode": 120000,
+      "capitalCenter": [
+        117.18386143092155,
+        39.124546989814526
+      ],
+      "capitalName": "天津市",
+      "image": "tianjin-style-a-imagegen.webp",
+      "extent": [
+        12990076.531054674,
+        4656963.019140955,
+        13143436.838560635,
+        4903706.088148069
+      ],
+      "cities": "tianjin-cities.geojson",
+      "counties": "tianjin-counties.geojson",
+      "subdivisionLabel": "区县",
+      "focusExtent": [
+        12991221.427157788,
+        4658101.833305603,
+        13142291.942457523,
+        4902567.273983421
+      ],
+      "contextImage": "tianjin-style-a-context.webp",
+      "neighbors": [
+        "beijing",
+        "hebei",
+        "shandong"
+      ]
+    },
+    {
+      "id": "shanghai",
+      "name": "上海",
+      "adcode": 310000,
+      "capitalAdcode": 310000,
+      "capitalCenter": [
+        121.46811740151729,
+        31.233644794700776
+      ],
+      "capitalName": "上海市",
+      "image": "shanghai-style-a-imagegen.webp",
+      "extent": [
+        13452509.187328922,
+        3590248.180476347,
+        13608762.3809273,
+        3747590.6682206485
+      ],
+      "cities": "shanghai-cities.geojson",
+      "counties": "shanghai-counties.geojson",
+      "subdivisionLabel": "区县",
+      "focusExtent": [
+        13453252.12608677,
+        3590974.3765736283,
+        13608019.442169452,
+        3746864.4721233672
+      ],
+      "contextImage": "shanghai-style-a-context.webp",
+      "neighbors": [
+        "jiangsu",
+        "zhejiang"
+      ]
+    },
+    {
+      "id": "liaoning",
+      "name": "辽宁",
+      "adcode": 210000,
+      "capitalAdcode": 210100,
+      "capitalCenter": [
+        123.42295854382719,
+        41.794336255705566
+      ],
+      "capitalName": "沈阳市",
+      "image": "liaoning-style-a-imagegen.webp",
+      "extent": [
+        13225597.232027316,
+        4678143.533888013,
+        14005974.215946605,
+        5390087.459217454
+      ],
+      "cities": "liaoning-cities.geojson",
+      "counties": "liaoning-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "liaoning-style-a-context.webp",
+      "neighbors": [
+        "hebei",
+        "inner-mongolia",
+        "jilin",
+        "shandong"
+      ]
+    },
+    {
+      "id": "jilin",
+      "name": "吉林",
+      "adcode": 220000,
+      "capitalAdcode": 220100,
+      "capitalCenter": [
+        125.31797988079086,
+        43.88442659631185
+      ],
+      "capitalName": "长春市",
+      "image": "jilin-style-a-imagegen.webp",
+      "extent": [
+        13535697.262276992,
+        4987437.665593817,
+        14622517.703074522,
+        5833903.585830354
+      ],
+      "cities": "jilin-cities.geojson",
+      "counties": "jilin-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "jilin-style-a-context.webp",
+      "neighbors": [
+        "heilongjiang",
+        "inner-mongolia",
+        "liaoning"
+      ]
+    },
+    {
+      "id": "heilongjiang",
+      "name": "黑龙江",
+      "adcode": 230000,
+      "capitalAdcode": 230100,
+      "capitalCenter": [
+        126.63649398976204,
+        45.75501586933661
+      ],
+      "capitalName": "哈尔滨市",
+      "image": "heilongjiang-style-a-imagegen.webp",
+      "extent": [
+        13481074.067985497,
+        5368595.541614588,
+        15045894.778586574,
+        7095477.480308477
+      ],
+      "cities": "heilongjiang-cities.geojson",
+      "counties": "heilongjiang-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "heilongjiang-style-a-context.webp",
+      "neighbors": [
+        "inner-mongolia",
+        "jilin"
+      ]
+    },
+    {
+      "id": "inner-mongolia",
+      "name": "内蒙古",
+      "adcode": 150000,
+      "capitalAdcode": 150100,
+      "capitalCenter": [
+        111.66402119546764,
+        40.81698123524542
+      ],
+      "capitalName": "呼和浩特市",
+      "image": "inner-mongolia-style-a-imagegen.webp",
+      "extent": [
+        10802168.67950235,
+        4480359.856746472,
+        14048007.629114207,
+        7060801.8216878995
+      ],
+      "cities": "inner-mongolia-cities.geojson",
+      "counties": "inner-mongolia-counties.geojson",
+      "subdivisionLabel": "城市",
+      "capitalKind": "自治区首府",
+      "contextImage": "inner-mongolia-style-a-context.webp",
+      "neighbors": [
+        "gansu",
+        "hebei",
+        "heilongjiang",
+        "jilin",
+        "liaoning",
+        "ningxia",
+        "shaanxi",
+        "shanxi"
+      ]
+    },
+    {
+      "id": "gansu",
+      "name": "甘肃",
+      "adcode": 620000,
+      "capitalAdcode": 620100,
+      "capitalCenter": [
+        103.8211313744368,
+        36.058346781285934
+      ],
+      "capitalName": "兰州市",
+      "image": "gansu-style-a-imagegen.webp",
+      "extent": [
+        10270495.639527446,
+        3833267.220753266,
+        12109774.014555575,
+        5289126.796063993
+      ],
+      "cities": "gansu-cities.geojson",
+      "counties": "gansu-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "gansu-style-a-context.webp",
+      "neighbors": [
+        "inner-mongolia",
+        "ningxia",
+        "qinghai",
+        "shaanxi",
+        "sichuan",
+        "xinjiang"
+      ]
+    },
+    {
+      "id": "ningxia",
+      "name": "宁夏",
+      "adcode": 640000,
+      "capitalAdcode": 640100,
+      "capitalCenter": [
+        106.27375828764774,
+        38.46590440113751
+      ],
+      "capitalName": "银川市",
+      "image": "ningxia-style-a-imagegen.webp",
+      "extent": [
+        11606096.173833612,
+        4193705.663294852,
+        11986794.189650726,
+        4779048.561653513
+      ],
+      "cities": "ningxia-cities.geojson",
+      "counties": "ningxia-counties.geojson",
+      "subdivisionLabel": "城市",
+      "capitalKind": "自治区首府",
+      "contextImage": "ningxia-style-a-context.webp",
+      "neighbors": [
+        "gansu",
+        "inner-mongolia",
+        "shaanxi"
+      ]
+    },
+    {
+      "id": "qinghai",
+      "name": "青海",
+      "adcode": 630000,
+      "capitalAdcode": 630100,
+      "capitalCenter": [
+        101.77698435307627,
+        36.62325694656183
+      ],
+      "capitalName": "西宁市",
+      "image": "qinghai-style-a-imagegen.webp",
+      "extent": [
+        9945102.180574115,
+        3703722.3607963473,
+        11480172.751379859,
+        4758788.172346296
+      ],
+      "cities": "qinghai-cities.geojson",
+      "counties": "qinghai-counties.geojson",
+      "subdivisionLabel": "城市",
+      "contextImage": "qinghai-style-a-context.webp",
+      "neighbors": [
+        "gansu",
+        "sichuan",
+        "tibet",
+        "xinjiang"
+      ]
+    },
+    {
+      "id": "xinjiang",
+      "name": "新疆",
+      "adcode": 650000,
+      "capitalAdcode": 650100,
+      "capitalCenter": [
+        87.61488373958102,
+        43.79159342684958
+      ],
+      "capitalName": "乌鲁木齐市",
+      "image": "xinjiang-style-a-imagegen.webp",
+      "extent": [
+        8170004.485947376,
+        4061923.7511546537,
+        10741451.64097605,
+        6317874.120624041
+      ],
+      "cities": "xinjiang-cities.geojson",
+      "counties": "xinjiang-counties.geojson",
+      "subdivisionLabel": "城市",
+      "capitalKind": "自治区首府",
+      "contextImage": "xinjiang-style-a-context.webp",
+      "neighbors": [
+        "gansu",
+        "qinghai",
+        "tibet"
+      ]
+    },
+    {
+      "id": "tibet",
+      "name": "西藏",
+      "adcode": 540000,
+      "capitalAdcode": 540100,
+      "capitalCenter": [
+        91.13066869316323,
+        29.663081434082876
+      ],
+      "capitalName": "拉萨市",
+      "image": "tibet-style-a-imagegen.webp",
+      "extent": [
+        8715938.895873962,
+        3094943.46890038,
+        11043986.34048585,
+        4378055.7720268555
+      ],
+      "cities": "tibet-cities.geojson",
+      "counties": "tibet-counties.geojson",
+      "subdivisionLabel": "城市",
+      "capitalKind": "自治区首府",
+      "contextImage": "tibet-style-a-context.webp",
+      "neighbors": [
+        "qinghai",
+        "sichuan",
+        "xinjiang",
+        "yunnan"
+      ]
+    },
+    {
+      "id": "hainan",
+      "name": "海南",
+      "adcode": 460000,
+      "capitalAdcode": 460100,
+      "capitalCenter": [
+        110.32681913315832,
+        20.034018076763655
+      ],
+      "capitalName": "海口市",
+      "image": "hainan-style-a-imagegen.webp",
+      "extent": [
+        12089327.150005938,
+        2054793.841322905,
+        12388310.58889999,
+        2294325.573329179
+      ],
+      "cities": "hainan-cities.geojson",
+      "counties": "hainan-counties.geojson",
+      "subdivisionLabel": "城市",
+      "focusExtent": [
+        12090707.073570065,
+        2056190.701871997,
+        12386930.665335866,
+        2292928.7127800873
+      ],
+      "contextImage": "hainan-style-a-context.webp",
+      "neighbors": [
+        "guangdong"
+      ]
+    },
+    {
+      "id": "hong-kong",
+      "name": "香港",
+      "adcode": 810000,
+      "capitalAdcode": 810000,
+      "capitalCenter": [
+        114.16839862410322,
+        22.32280485943514
+      ],
+      "capitalName": "香港",
+      "image": "hong-kong-style-a-imagegen.webp",
+      "extent": [
+        12671743.426906686,
+        2529709.6122627775,
+        12739936.333529562,
+        2579437.9780154605
+      ],
+      "cities": "hong-kong-cities.geojson",
+      "counties": "hong-kong-counties.geojson",
+      "subdivisionLabel": "区县",
+      "focusExtent": [
+        12672058.163398791,
+        2530030.1754272943,
+        12739621.597037457,
+        2579117.414850944
+      ],
+      "capitalKind": "特别行政区",
+      "maxZoom": 16,
+      "contextImage": "hong-kong-style-a-context.webp",
+      "neighbors": [
+        "guangdong",
+        "macau"
+      ]
+    },
+    {
+      "id": "macau",
+      "name": "澳门",
+      "adcode": 820000,
+      "capitalAdcode": 820000,
+      "capitalCenter": [
+        113.54400044951504,
+        22.201901502720197
+      ],
+      "capitalName": "澳门",
+      "image": "macau-style-a-imagegen.webp",
+      "extent": [
+        12637890.32681799,
+        2524651.896689843,
+        12645772.10386382,
+        2537663.084194074
+      ],
+      "cities": "macau-cities.geojson",
+      "counties": "macau-counties.geojson",
+      "subdivisionLabel": "堂区",
+      "focusExtent": [
+        12637951.441656083,
+        2524711.9483244778,
+        12645710.989025727,
+        2537603.032559439
+      ],
+      "capitalKind": "特别行政区",
+      "maxZoom": 16,
+      "contextImage": "macau-style-a-context.webp",
+      "neighbors": [
+        "guangdong",
+        "hong-kong"
+      ]
+    },
+    {
+      "id": "taiwan",
+      "name": "台湾",
+      "adcode": 710000,
+      "capitalAdcode": 63000,
+      "capitalCenter": [
+        121.50513307367157,
+        25.04713072088304
+      ],
+      "capitalName": "臺北市",
+      "image": "taiwan-style-a-imagegen.webp",
+      "extent": [
+        13290708.97713887,
+        2495102.310940042,
+        13870933.05196385,
+        2994987.6677123345
+      ],
+      "cities": "taiwan-cities.geojson",
+      "counties": "taiwan-counties.geojson",
+      "subdivisionLabel": "城市",
+      "focusExtent": [
+        13293386.934407292,
+        2497853.65923793,
+        13594129.170060907,
+        2937284.437423844
+      ],
+      "contextImage": "taiwan-style-a-context.webp",
+      "neighbors": []
+    }
+  ]
+}

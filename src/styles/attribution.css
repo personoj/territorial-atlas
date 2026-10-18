@@ -1,0 +1,51 @@
+.atlas-map-attribution.ol-attribution {
+  left: 24px;
+  right: auto;
+  bottom: 55px;
+  max-width: calc(100vw - 48px);
+  padding: 3px 7px;
+  border: 1px solid #d6dfcb99;
+  border-radius: 4px;
+  background: #fffff7de;
+  color: #6d7b66;
+  font:
+    10px/1.5 "Microsoft YaHei",
+    sans-serif;
+  text-align: left;
+}
+.atlas-map-attribution.ol-attribution ul {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: none;
+  padding: 0;
+  color: inherit;
+  text-shadow: none;
+  font: inherit;
+}
+.atlas-map-attribution a {
+  color: #5c7053;
+}
+.atlas-map-attribution li {
+  padding: 0;
+}
+.atlas-attribution-details summary {
+  cursor: pointer;
+  white-space: nowrap;
+}
+.atlas-attribution-sources {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  box-sizing: border-box;
+  width: min(390px, calc(100vw - 48px));
+  padding: 10px 13px;
+  border: 1px solid #d6dfcb;
+  border-radius: 5px;
+  background: #fffff9f5;
+  box-shadow: 0 4px 18px #30452d1a;
+  font-size: 11px;
+}
+.atlas-attribution-sources p {
+  margin: 5px 0;
+}
