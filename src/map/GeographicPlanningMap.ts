@@ -42,6 +42,7 @@ import type { DecodedMapImage } from "./assets";
 import { AssetQueue } from "./AssetQueue";
 import { createMapAttribution } from "./attribution";
 import { StaticTextureLayer } from "./StaticTextureLayer";
+import { SurroundingContext } from "./SurroundingContext";
 import type {
   MapFeature,
   PlaceFeature,
@@ -118,6 +119,7 @@ export class GeographicPlanningMap extends EventTarget {
   private countySource!: VectorSource<MapFeature>;
   private hubei?: MapFeature;
   private worldLayer!: ImageLayer<ImageStaticSource>;
+  private surroundingContext!: SurroundingContext;
   private nationalLayer!: ImageLayer<ImageStaticSource>;
   private regionLayers = new Map<string, ImageLayer<ImageSource>>();
   private contextLayers = new Map<string, ImageLayer<ImageSource>>();
@@ -225,7 +227,7 @@ export class GeographicPlanningMap extends EventTarget {
       this.loadJSON<MapMetadata>("manifest.json"),
       this.loadJSON("provinces.geojson"),
       this.loadJSON<MapStyleConfig>("style-a.json"),
-      this.loadJSON("country-context.geojson"),
+      this.loadJSON("surrounding-context.geojson"),
       this.loadJSON<RegionRegistry>("regions-style-a.json"),
     ]);
     this.abortController.signal.throwIfAborted();
@@ -270,6 +272,7 @@ export class GeographicPlanningMap extends EventTarget {
         ...extra,
       });
     const world = 20037508.342789244;
+    this.surroundingContext = new SurroundingContext(read(context), this.view);
     this.worldLayer = image(
       "world-style-a.webp",
       [-world, -world, world, world],
@@ -279,7 +282,9 @@ export class GeographicPlanningMap extends EventTarget {
       "china-style-a-imagegen.webp",
       styleA.chinaExtent,
     );
+    this.map.addLayer(this.surroundingContext.baseLayer);
     this.map.addLayer(this.worldLayer);
+    this.map.addLayer(this.surroundingContext.lineLayer);
     this.map.addLayer(this.nationalLayer);
     this.regionLayers = new Map();
     for (const region of this.regions) {
@@ -331,16 +336,7 @@ export class GeographicPlanningMap extends EventTarget {
       visible: false,
     });
     this.map.addLayer(this.originalLayer);
-    this.map.addLayer(
-      new VectorLayer({
-        source: new VectorSource({ features: read(context) }),
-        updateWhileAnimating: true,
-        updateWhileInteracting: true,
-        style: new Style({
-          fill: new Fill({ color: "rgba(244,245,235,.82)" }),
-        }),
-      }),
-    );
+    this.map.addLayer(this.surroundingContext.labelLayer);
     this.provinceLayer = new VectorLayer({
       source: this.provinceSource,
       updateWhileAnimating: true,
@@ -1168,6 +1164,7 @@ export class GeographicPlanningMap extends EventTarget {
     }
     this.detailMix = active ? activeMix : retiringFocus;
     this.nationalLayer.setOpacity(1 - 0.32 * visibleFocus);
+    this.surroundingContext.update(this.detailMix, this.showLabels);
     this.borderLayer.setOpacity(1);
     this.target.dataset.detailOpacity = this.detailMix.toFixed(3);
   }
@@ -1394,6 +1391,7 @@ export class GeographicPlanningMap extends EventTarget {
   }
   setLabels(value: boolean) {
     this.showLabels = !!value;
+    this.surroundingContext.update(this.detailMix, this.showLabels);
     this.labelLayer.changed();
     this.cityMarkerLayer.changed();
     this.emitLayers();

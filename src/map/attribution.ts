@@ -8,7 +8,7 @@ export const MAP_ATTRIBUTIONS = [
       <p>海岸线：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a> · <a href="https://download.geofabrik.de/asia/china.html" target="_blank" rel="noopener noreferrer">Geofabrik</a></p>
       <p>香港海岸线：© 香港特别行政区政府 · <a href="https://www.landsd.gov.hk/en/spatial-data/open-data.html" target="_blank" rel="noopener noreferrer">地政总署</a> · <a href="https://data.gov.hk/en/terms-and-conditions" target="_blank" rel="noopener noreferrer">DATA.GOV.HK</a></p>
       <p>行政区划：<a href="https://datav.aliyun.com/portal/school/atlas/area_selector" target="_blank" rel="noopener noreferrer">DataV</a> · <a href="https://data.gov.tw/dataset/7441" target="_blank" rel="noopener noreferrer">国土测绘中心开放资料</a></p>
-      <p>地形与水系参考：<a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> · <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener noreferrer">Mapzen Terrain Tiles</a></p>
+      <p>周边地理、地形与水系：<a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> · <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener noreferrer">Mapzen Terrain Tiles</a></p>
     </div>`,
 ];
 
