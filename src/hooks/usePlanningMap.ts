@@ -1,6 +1,11 @@
 import { useEffect, useState, type RefObject } from "react";
 import { GeographicPlanningMap } from "../map";
-import type { MapViewState } from "../map";
+import type {
+  MapViewState,
+  MapNavigation,
+  DetailLoadState,
+  MapLayerState,
+} from "../map";
 import { MAP_ASSET_BASE } from "../config/assets";
 
 /** Owns the map lifetime; React renders UI without driving individual map frames. */
@@ -8,12 +13,26 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
   const [map, setMap] = useState<GeographicPlanningMap | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [locationName, setLocationName] = useState("全国");
+  const [layers, setLayers] = useState<MapLayerState | null>(null);
+  const [navigation, setNavigation] = useState<MapNavigation>({
+    id: "national",
+    name: "全国",
+    level: "national",
+  });
+  const [cityDetail, setCityDetail] = useState<DetailLoadState | null>(null);
+  const [countyDetail, setCountyDetail] = useState<DetailLoadState | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!container.current) return;
     setMap(null);
     setError(null);
     setLocationName("全国");
+    setLayers(null);
+    setNavigation({ id: "national", name: "全国", level: "national" });
+    setCityDetail(null);
+    setCountyDetail(null);
     delete document.body.dataset.ready;
     delete document.body.dataset.error;
     const instance = new GeographicPlanningMap(container.current, {
@@ -23,7 +42,7 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
     let cancelled = false;
     const cleanups: (() => void)[] = [];
     const restoreHash = (id: string, animate = true) => {
-      if (id && id !== "national" && instance.fitRegion(id, animate)) return;
+      if (id && instance.fitLocation(id, animate)) return;
       instance.fitNational(animate);
     };
     const updateView = (view: MapViewState) => {
@@ -48,8 +67,13 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
           instance.on("detailchange", () => {
             delete document.body.dataset.detailError;
           }),
-          instance.on("regionchange", (detail) => {
-            const id = detail.available ? detail.id : "national";
+          instance.on("citydetailchange", setCityDetail),
+          instance.on("countydetailchange", setCountyDetail),
+          instance.on("layerchange", setLayers),
+          instance.on("navigationchange", (detail) => {
+            setNavigation(detail);
+            setLayers(instance.getLayerState());
+            const id = detail.id;
             history.replaceState(
               null,
               "",
@@ -63,6 +87,7 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
           window.removeEventListener("hashchange", onHashChange),
         );
         restoreHash(initialRegion, false);
+        setLayers(instance.getLayerState());
         updateView(instance.getViewState());
         setMap(instance);
         document.body.dataset.ready = "true";
@@ -85,5 +110,14 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
     };
   }, [container]);
 
-  return { map, error, locationName, loading: !map && !error };
+  return {
+    map,
+    error,
+    locationName,
+    navigation,
+    cityDetail,
+    countyDetail,
+    layers,
+    loading: !map && !error,
+  };
 }

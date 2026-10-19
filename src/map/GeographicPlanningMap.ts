@@ -43,6 +43,7 @@ import { AssetQueue } from "./AssetQueue";
 import { createMapAttribution } from "./attribution";
 import { StaticTextureLayer } from "./StaticTextureLayer";
 import { SurroundingContext } from "./SurroundingContext";
+import { LocalDetailLayer } from "./LocalDetailLayer";
 import type {
   MapFeature,
   PlaceFeature,
@@ -57,6 +58,8 @@ import type {
   PlaceIndex,
   IndexedPlace,
   RegionEmphasis,
+  DetailDefinition,
+  MapNavigation,
 } from "./types";
 
 const format = new GeoJSONFormat();
@@ -95,12 +98,15 @@ export class GeographicPlanningMap extends EventTarget {
   private disposed = false;
   private showLabels = true;
   private showBoundaries = true;
+  private showTownships = true;
   private showPlanning = true;
   private original = false;
   private reduced: boolean;
   private readonly attribution = createMapAttribution();
   private detailMix = 0;
   private activeRegion: RegionInfo | null = null;
+  private cityDetails?: LocalDetailLayer;
+  private countyDetails?: LocalDetailLayer;
   private regions: RegionDefinition[] = [];
   private regionsById = new Map<string, RegionDefinition>();
   private regionsByAdcode = new Map<number, RegionDefinition>();
@@ -208,12 +214,15 @@ export class GeographicPlanningMap extends EventTarget {
     this.observer = new ResizeObserver(() => {
       this.map.updateSize();
       this.scheduleRegionRefresh();
+      this.cityDetails?.updatePresentation();
+      this.countyDetails?.updatePresentation();
     });
     this.observer.observe(target);
     this.styles = new MapStyles(
       this.view,
       () => this.getLayerState(),
       (id) => this.regionEmphasis.get(id) || this.overviewEmphasis,
+      () => this.cityDetails?.getActive()?.adcode,
     );
   }
   emit<K extends keyof MapEvents>(type: K, detail: MapEvents[K]) {
@@ -244,9 +253,17 @@ export class GeographicPlanningMap extends EventTarget {
       this.regionsById.set(region.id, region);
       this.regionsByAdcode.set(region.adcode, region);
     }
-    const placeIndex = registry.placeIndex
-      ? await this.loadJSON<PlaceIndex>(registry.placeIndex)
-      : await this.legacyPlaceIndex();
+    const [placeIndex, cityRegistry] = await Promise.all([
+      registry.placeIndex
+        ? this.loadJSON<PlaceIndex>(registry.placeIndex)
+        : this.legacyPlaceIndex(),
+      registry.cityDetails
+        ? this.loadJSON<{
+            cities: DetailDefinition[];
+            counties?: DetailDefinition[];
+          }>(registry.cityDetails)
+        : Promise.resolve({ cities: [], counties: [] }),
+    ]);
     this.abortController.signal.throwIfAborted();
     const read = (data: FeatureCollection) =>
       format.readFeatures(data, { featureProjection: "EPSG:3857" });
@@ -500,6 +517,35 @@ export class GeographicPlanningMap extends EventTarget {
       style: (f, res) => this.styles.labelStyle(f as PlaceFeature, res),
     });
     this.map.addLayer(this.labelLayer);
+    this.cityDetails = new LocalDetailLayer(
+      this.map,
+      cityRegistry.cities,
+      this.assetBase,
+      () => this.getLayerState(),
+      (state) => {
+        this.target.dataset.activeCity = state.id || "";
+        this.target.dataset.cityReady = String(state.ready);
+        this.emit("citydetailchange", state);
+      },
+      this.reduced,
+    );
+    this.countyDetails = new LocalDetailLayer(
+      this.map,
+      cityRegistry.counties || [],
+      this.assetBase,
+      () => this.getLayerState(),
+      (state) => {
+        this.target.dataset.activeCounty = state.id || "";
+        this.target.dataset.countyReady = String(state.ready);
+        this.cityDetails?.setFocusedChild(
+          state.id
+            ? this.countyDetails?.getDefinition(state.id)?.adcode
+            : undefined,
+        );
+        this.emit("countydetailchange", state);
+      },
+      this.reduced,
+    );
     this.businessSource = new VectorSource();
     this.businessLayer = new VectorLayer({
       source: this.businessSource,
@@ -1036,6 +1082,8 @@ export class GeographicPlanningMap extends EventTarget {
       ? this.activeRegion.id
       : undefined;
     const resource = active ? this.regionResources.get(active) : undefined;
+    const cityDetail = this.cityDetails?.getState();
+    const countyDetail = this.countyDetails?.getState();
     return {
       ...this.assetQueue.getState(),
       wanted: [...this.wantedRegions],
@@ -1048,12 +1096,15 @@ export class GeographicPlanningMap extends EventTarget {
         (id) => this.regionResources.get(id)?.texture,
       ),
       targetReady:
-        !active ||
-        Boolean(
-          (!this.showPlanning ||
-            (resource?.texture && Number.isFinite(resource.textureReadyAt))) &&
-          resource?.cities,
-        ),
+        (!active ||
+          Boolean(
+            (!this.showPlanning ||
+              (resource?.texture &&
+                Number.isFinite(resource.textureReadyAt))) &&
+            resource?.cities,
+          )) &&
+        (!cityDetail?.id || cityDetail.ready) &&
+        (!countyDetail?.id || countyDetail.ready),
       effectiveTransitionZoom: active
         ? this.effectiveTransitions.get(active)
         : undefined,
@@ -1084,6 +1135,8 @@ export class GeographicPlanningMap extends EventTarget {
       countyRegions: [...this.regionResources]
         .filter(([, r]) => r.countiesMounted)
         .map(([id]) => id),
+      cityDetail,
+      countyDetail,
     };
   }
 
@@ -1167,15 +1220,72 @@ export class GeographicPlanningMap extends EventTarget {
     this.surroundingContext.update(this.detailMix, this.showLabels);
     this.borderLayer.setOpacity(1);
     this.target.dataset.detailOpacity = this.detailMix.toFixed(3);
+    this.cityDetails?.updatePresentation();
+    this.countyDetails?.updatePresentation();
   }
 
   handleClick(e: { pixel: Pixel; coordinate: Coordinate }) {
+    // Keep camera gestures separate from explicit selection. Only configured
+    // child regions drill down; clicking another area can return to its parent.
+    if (this.countyDetails?.contains(e.coordinate)) {
+      this.emit("mapclick", { coordinate: toLonLat(e.coordinate) });
+      return;
+    }
+    const county = this.clickableCounty(e.pixel, e.coordinate);
+    if (county) {
+      if (this.countyDetails?.getActive()?.id !== county.id)
+        this.fitCounty(county.id);
+      return;
+    }
+    if (this.cityDetails?.contains(e.coordinate)) {
+      if (this.countyDetails?.getActive())
+        this.fitCity(this.cityDetails.getActive()!.id);
+      else this.emit("mapclick", { coordinate: toLonLat(e.coordinate) });
+      return;
+    }
+    const city = this.clickableCity(e.pixel, e.coordinate);
+    if (city) {
+      if (this.cityDetails?.getActive()?.id !== city.id) this.fitCity(city.id);
+      return;
+    }
     const province = this.clickableProvince(e.pixel, e.coordinate);
     if (province) {
       this.fitProvince(province);
       return;
     }
     this.emit("mapclick", { coordinate: toLonLat(e.coordinate) });
+  }
+  private clickableCounty(pixel: Pixel, coordinate: Coordinate) {
+    const adcode = this.cityDetails?.subdivisionAt(pixel, coordinate);
+    return this.countyDetails?.definitions.find(
+      (county) =>
+        county.parentId === this.cityDetails?.getActive()?.id &&
+        county.adcode === adcode,
+    );
+  }
+  private clickableCity(pixel: Pixel, coordinate: Coordinate) {
+    const candidates = this.cityDetails?.definitions.filter(
+      (city) => city.parentId === this.activeRegion?.id,
+    );
+    if (!candidates?.length) return undefined;
+    const matching = (feature: MapFeature) =>
+      candidates.find((city) => city.adcode === Number(feature.get("adcode")));
+    const labelHit = this.map.forEachFeatureAtPixel(
+      pixel,
+      (feature) => matching(feature as MapFeature),
+      {
+        layerFilter: (layer) =>
+          layer === this.labelLayer || layer === this.cityMarkerLayer,
+        hitTolerance: 4,
+      },
+    );
+    return (
+      labelHit ||
+      this.citySource
+        .getFeaturesAtCoordinate(coordinate)
+        .map(matching)
+        .find(Boolean)
+    );
   }
   provinceAt(coordinate: Coordinate) {
     return this.provinceSource
@@ -1219,6 +1329,8 @@ export class GeographicPlanningMap extends EventTarget {
     );
   }
   setActiveRegion(region: RegionInfo | null | undefined) {
+    this.countyDetails?.clear();
+    this.cityDetails?.clear();
     const changed = this.activeRegion?.id !== region?.id;
     this.activeRegion = region || null;
     if (this.original && region?.id !== "hubei") this.setOriginal(false);
@@ -1265,6 +1377,113 @@ export class GeographicPlanningMap extends EventTarget {
       adcode: region!.adcode,
       level: "province",
     });
+    this.emit("navigationchange", this.getNavigationState());
+    return true;
+  }
+  fitCity(id: string, animate = true) {
+    const city = this.cityDetails?.getDefinition(id);
+    const parent = city && this.activateCity(city);
+    if (!city || !parent) return false;
+    this.fitExtent(city.focusExtent || city.extent, animate, city.maxZoom);
+    this.emit("locationchange", {
+      id: city.id,
+      name: city.name,
+      adcode: city.adcode,
+      level: "city",
+      regionName: parent.name,
+      regionAdcode: parent.adcode,
+    });
+    this.emit("navigationchange", this.getNavigationState());
+    return true;
+  }
+  private activateCity(city: DetailDefinition) {
+    const province = this.regionsById.get(city.provinceId);
+    if (!province) return undefined;
+    this.countyDetails?.clear();
+    if (
+      this.activeRegion?.id !== province.id ||
+      this.cityDetails?.getActive()?.id !== city.id
+    ) {
+      this.setActiveRegion(province);
+      if (this.original) this.setOriginal(false);
+      this.cityDetails!.select(city.id);
+    }
+    this.primeRegion(province);
+    this.invalidatePresentation();
+    return province;
+  }
+  fitCounty(id: string, animate = true) {
+    const county = this.countyDetails?.getDefinition(id);
+    const city = county && this.cityDetails?.getDefinition(county.parentId);
+    if (!county || !city) return false;
+    if (
+      this.cityDetails?.getActive()?.id !== city.id &&
+      !this.activateCity(city)
+    )
+      return false;
+    this.countyDetails!.select(id);
+    this.fitExtent(
+      county.focusExtent || county.extent,
+      animate,
+      county.maxZoom,
+    );
+    this.emit("locationchange", {
+      id: county.id,
+      name: county.name,
+      adcode: county.adcode,
+      level: "county",
+      regionName: this.activeRegion?.name,
+      regionAdcode: this.activeRegion?.adcode,
+    });
+    this.emit("navigationchange", this.getNavigationState());
+    return true;
+  }
+  fitLocation(id: string, animate = true) {
+    if (id === "national") {
+      this.fitNational(animate);
+      return true;
+    }
+    return (
+      this.fitCounty(id, animate) ||
+      this.fitCity(id, animate) ||
+      this.fitRegion(id, animate)
+    );
+  }
+  getNavigationState(): MapNavigation {
+    const county = this.countyDetails?.getActive();
+    if (county)
+      return {
+        id: county.id,
+        name: county.name,
+        level: "county",
+        parentId: county.parentId,
+        parentName: county.parentName,
+      };
+    const city = this.cityDetails?.getActive();
+    if (city)
+      return {
+        id: city.id,
+        name: city.name,
+        level: "city",
+        parentId: city.parentId,
+        parentName: city.parentName,
+      };
+    if (this.activeRegion)
+      return {
+        id: this.activeRegion.id,
+        name: this.activeRegion.name,
+        level: "province",
+        parentId: "national",
+        parentName: "全国",
+      };
+    return { id: "national", name: "全国", level: "national" };
+  }
+  fitParent(animate = true) {
+    const county = this.countyDetails?.getActive();
+    if (county) return this.fitCity(county.parentId, animate);
+    const city = this.cityDetails?.getActive();
+    if (city) return this.fitRegion(city.parentId, animate);
+    this.fitNational(animate);
     return true;
   }
   fitHubei(animate = true) {
@@ -1282,6 +1501,7 @@ export class GeographicPlanningMap extends EventTarget {
       adcode: 100000,
       level: "national",
     });
+    this.emit("navigationchange", this.getNavigationState());
   }
   fitProvince(feature: MapFeature, animate = true) {
     const region = this.regionForProvince(feature);
@@ -1290,6 +1510,7 @@ export class GeographicPlanningMap extends EventTarget {
     this.setActiveRegion(region);
     this.fitExtent(feature.getGeometry()!.getExtent(), animate);
     this.emit("locationchange", { ...region, level: "province" });
+    this.emit("navigationchange", this.getNavigationState());
     return true;
   }
   getRegions() {
@@ -1318,9 +1539,24 @@ export class GeographicPlanningMap extends EventTarget {
       if (province) this.fitProvince(province);
       return;
     }
+    const county = this.countyDetails?.definitions.find(
+      (definition) => definition.adcode === Number(feature.get("adcode")),
+    );
+    if (county) {
+      this.fitCounty(county.id);
+      return;
+    }
+    const city = this.cityDetails?.definitions.find(
+      (definition) => definition.adcode === Number(feature.get("adcode")),
+    );
+    if (city) {
+      this.fitCity(city.id);
+      return;
+    }
     const region = this.regionsById.get(feature.get("regionId"));
     if (region) this.setActiveRegion(region);
     if (region) this.primeRegion(region);
+    this.emit("navigationchange", this.getNavigationState());
     this.view.cancelAnimations();
     this.view.animate({
       center: feature.getGeometry()!.getCoordinates(),
@@ -1385,6 +1621,8 @@ export class GeographicPlanningMap extends EventTarget {
       .slice(0, 12);
   }
   emitLayers() {
+    this.cityDetails?.updatePresentation();
+    this.countyDetails?.updatePresentation();
     const state = this.getLayerState();
     this.emit("layerschange", state);
     this.emit("layerchange", state);
@@ -1403,6 +1641,10 @@ export class GeographicPlanningMap extends EventTarget {
     this.refreshVisibleRegions();
     this.emitLayers();
   }
+  setTownships(value: boolean) {
+    this.showTownships = !!value;
+    this.emitLayers();
+  }
   setPlanning(value: boolean) {
     this.showPlanning = !!value;
     this.originalLayer.setVisible(this.showPlanning && this.original);
@@ -1410,7 +1652,10 @@ export class GeographicPlanningMap extends EventTarget {
     this.emitLayers();
   }
   setOriginal(value: boolean) {
-    this.original = !!value && this.activeRegion?.id === "hubei";
+    this.original =
+      !!value &&
+      this.activeRegion?.id === "hubei" &&
+      !this.cityDetails?.getActive();
     this.setPlanning(this.showPlanning);
     this.cityBoundaryLayer.changed();
     this.countyBoundaryLayer.changed();
@@ -1422,9 +1667,14 @@ export class GeographicPlanningMap extends EventTarget {
     return {
       labels: this.showLabels,
       boundaries: this.showBoundaries,
+      townships: this.showTownships,
+      townshipsAvailable: Boolean(
+        this.countyDetails?.getActive()?.subdivisionOverlay,
+      ),
       planning: this.showPlanning,
       original: this.original,
-      originalAvailable: this.activeRegion?.id === "hubei",
+      originalAvailable:
+        this.activeRegion?.id === "hubei" && !this.cityDetails?.getActive(),
     };
   }
   zoomBy(delta: number) {
@@ -1450,12 +1700,16 @@ export class GeographicPlanningMap extends EventTarget {
       resolution: this.view.getResolution()!,
       detailOpacity: this.detailMix || 0,
       activeRegionId: this.activeRegion?.id || null,
+      activeCityId: this.cityDetails?.getActive()?.id || null,
+      activeCountyId: this.countyDetails?.getActive()?.id || null,
     };
   }
   destroy() {
     if (this.disposed) return;
     this.disposed = true;
     this.abortController.abort();
+    this.countyDetails?.destroy();
+    this.cityDetails?.destroy();
     this.assetQueue.destroy();
     if (this.refreshTimer) clearTimeout(this.refreshTimer);
     if (this.fadeFrame !== undefined) cancelAnimationFrame(this.fadeFrame);

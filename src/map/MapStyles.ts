@@ -39,6 +39,7 @@ export class MapStyles {
     private view: View,
     private state: () => MapLayerState,
     private emphasis: (regionId: string) => RegionEmphasis,
+    private activeCity: () => number | undefined = () => undefined,
   ) {}
   isOriginalFeature(feature: MapFeature) {
     return this.state().original && feature.get("regionId") === "hubei";
@@ -132,6 +133,7 @@ export class MapStyles {
     return this.focusBorders.get(step);
   }
   cityMarkerStyle(feature: PlaceFeature, res: number) {
+    if (Number(feature.get("adcode")) === this.activeCity()) return undefined;
     if (!this.state().labels || this.isOriginalFeature(feature))
       return undefined;
     const capital = feature.get("capital");
@@ -170,6 +172,12 @@ export class MapStyles {
     return this.markerStyles.get(key);
   }
   labelStyle(f: PlaceFeature, res: number) {
+    if (
+      this.activeCity() &&
+      (f.get("level") === "county" ||
+        Number(f.get("adcode")) === this.activeCity())
+    )
+      return undefined;
     if (!this.state().labels || this.isOriginalFeature(f)) return undefined;
     const level = f.get("level"),
       zoom = this.view.getZoomForResolution(res) ?? 4,

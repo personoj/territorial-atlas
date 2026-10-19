@@ -1,6 +1,7 @@
 {
   "version": 2,
   "placeIndex": "places-style-a.json",
+  "cityDetails": "city-details.json",
   "regions": [
     {
       "id": "hubei",

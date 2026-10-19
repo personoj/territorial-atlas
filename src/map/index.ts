@@ -6,4 +6,7 @@ export type {
   MapViewState,
   RegionDefinition,
   SearchResult,
+  MapNavigation,
+  CityDetailState,
+  DetailLoadState,
 } from "./types";

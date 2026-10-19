@@ -38,8 +38,45 @@ export interface RegionDefinition extends RegionInfo {
 export interface RegionRegistry {
   version: number;
   placeIndex?: string;
+  cityDetails?: string;
   regions: Omit<RegionDefinition, "available">[];
 }
+
+export interface DetailDefinition {
+  id: string;
+  name: string;
+  adcode: number;
+  level: "city" | "county";
+  parentId: string;
+  parentName: string;
+  provinceId: string;
+  image: string;
+  geometry: string;
+  /** Optional separate GeoJSON with boundary lines and interior name anchors. */
+  subdivisionOverlay?: string;
+  extent: Extent;
+  focusExtent?: Extent;
+  maxZoom: number;
+}
+
+export interface MapNavigation {
+  id: string;
+  name: string;
+  level: "national" | "province" | "city" | "county";
+  parentId?: string;
+  parentName?: string;
+}
+
+export interface DetailLoadState {
+  id: string | null;
+  name: string;
+  loading: boolean;
+  ready: boolean;
+  error?: string;
+}
+
+/** Compatibility for hosts that already consume the city loading event. */
+export type CityDetailState = DetailLoadState;
 
 export interface IndexedPlace {
   regionId: string;
@@ -71,6 +108,8 @@ export interface MapStyleConfig {
 export interface MapLayerState {
   labels: boolean;
   boundaries: boolean;
+  townships: boolean;
+  townshipsAvailable: boolean;
   planning: boolean;
   original: boolean;
   originalAvailable: boolean;
@@ -89,6 +128,8 @@ export interface MapViewState {
   resolution: number;
   detailOpacity: number;
   activeRegionId: string | null;
+  activeCityId: string | null;
+  activeCountyId: string | null;
 }
 
 export interface MapLocation {
@@ -105,6 +146,9 @@ export interface MapEvents {
   viewchange: MapViewState;
   regionchange: RegionInfo;
   locationchange: MapLocation;
+  navigationchange: MapNavigation;
+  citydetailchange: CityDetailState;
+  countydetailchange: DetailLoadState;
   layerchange: MapLayerState;
   layerschange: MapLayerState;
   mapclick: { coordinate: Coordinate };

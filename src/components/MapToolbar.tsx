@@ -2,9 +2,23 @@ interface Props {
   disabled: boolean;
   onZoom: (delta: number) => void;
   onNational: () => void;
+  parentName?: string;
+  onParent: () => void;
+  townshipsAvailable: boolean;
+  townshipsVisible: boolean;
+  onToggleTownships: () => void;
 }
 
-export function MapToolbar({ disabled, onZoom, onNational }: Props) {
+export function MapToolbar({
+  disabled,
+  onZoom,
+  onNational,
+  parentName,
+  onParent,
+  townshipsAvailable,
+  townshipsVisible,
+  onToggleTownships,
+}: Props) {
   return (
     <div className="map-tools" aria-label="地图工具">
       <button
@@ -26,6 +40,33 @@ export function MapToolbar({ disabled, onZoom, onNational }: Props) {
         −
       </button>
       <span className="tool-divider" />
+      {townshipsAvailable && (
+        <button
+          id="toggle-townships"
+          title={townshipsVisible ? "隐藏乡镇界线和名称" : "显示乡镇界线和名称"}
+          aria-label="乡镇界线和名称"
+          aria-pressed={townshipsVisible}
+          disabled={disabled}
+          onClick={onToggleTownships}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m3 8 9-5 9 5-9 5-9-5Zm0 4 9 5 9-5M3 16l9 5 9-5" />
+          </svg>
+        </button>
+      )}
+      {parentName && (
+        <button
+          id="back-parent"
+          title={`返回${parentName}`}
+          aria-label={`返回${parentName}`}
+          disabled={disabled}
+          onClick={onParent}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9 5-5 5 5 5M4 10h9a6 6 0 0 1 6 6v3" />
+          </svg>
+        </button>
+      )}
       <button
         id="home-national"
         title="返回全国"

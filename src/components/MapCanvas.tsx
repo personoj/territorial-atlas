@@ -11,7 +11,7 @@ export function MapCanvas({ containerRef, locationName }: Props) {
       id="geographic-map"
       ref={containerRef}
       tabIndex={0}
-      aria-label={`${locationName}地图，点击省份切换，支持缩放和拖动`}
+      aria-label={`${locationName}地图，支持区域下钻、缩放和拖动`}
     />
   );
 }

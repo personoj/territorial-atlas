@@ -26,6 +26,10 @@
   background: #e7eedf;
   color: #244b36;
 }
+.map-tools button[aria-pressed="true"] {
+  background: #e7eedf;
+  color: #244b36;
+}
 .map-tools svg {
   width: 19px;
   height: 19px;

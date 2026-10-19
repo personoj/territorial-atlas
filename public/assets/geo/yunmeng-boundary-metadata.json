@@ -1,0 +1,75 @@
+{
+  "name": "云梦县底图边界基线",
+  "adcode": 420923,
+  "parentAdcode": 420900,
+  "geometry": "yunmeng-boundary.geojson",
+  "status": "working-baseline; not an official surveyed boundary",
+  "source": "hubei-counties.geojson, same footprint as xiaogan-administration.geojson",
+  "coordinateConvention": "WGS84-like, existing approximate GCJ-02 inverse transform per repository license notes",
+  "bounds": [
+    113.62763997910824,
+    30.75618876184706,
+    113.88263718510855,
+    31.20976355410642
+  ],
+  "valid": true,
+  "geometryType": "Polygon",
+  "topologyRepair": {
+    "from": "3 polygons sharing edges; invalid MultiPolygon",
+    "to": "1 valid Polygon",
+    "method": "unary_union, no smoothing or coordinate relocation",
+    "coverageAreaChangeSquareDegrees": 1.3877787807814457e-17
+  },
+  "referenceImagesReceived": 5,
+  "planningComparisons": [
+    {
+      "reference": "02-control-lines.png",
+      "method": "Brown outer county-line connected component; fill and 2px erosion; robust affine silhouette fit. This is visual shape comparison, not surveyed georeferencing.",
+      "pixelAffine": [
+        388.6869041716852,
+        -18.832152577379112,
+        9.217123031544286,
+        779.1969850362145,
+        339.7082145240368,
+        476.3616809795674
+      ],
+      "silhouetteIoU": 0.96687204929183,
+      "boundaryResidualPixelsP50P95": [
+        1.3891736119580043,
+        4.922609505823682
+      ]
+    },
+    {
+      "reference": "04-town-layout.png",
+      "method": "Brown outer county-line connected component; fill and 2px erosion; robust affine silhouette fit. This is visual shape comparison, not surveyed georeferencing.",
+      "pixelAffine": [
+        389.0151161594621,
+        -19.03082530312294,
+        9.306063475583883,
+        779.8090576864133,
+        338.74011312650975,
+        482.9214570247681
+      ],
+      "silhouetteIoU": 0.9668657650638913,
+      "boundaryResidualPixelsP50P95": [
+        1.3671288238001367,
+        4.87608732739574
+      ]
+    }
+  ],
+  "geodesicAreaKm2": 609.7384568355468,
+  "geodesicPerimeterKm": 160.47955216885745,
+  "neighbors": [
+    "孝南区",
+    "孝昌县",
+    "应城市",
+    "安陆市",
+    "汉川市"
+  ],
+  "limitations": [
+    "Reference screenshots identify the overall county outline but do not provide an authoritative coordinate grid.",
+    "Existing county coordinates are generalized and approximately inverse-transformed from GCJ-02.",
+    "A separately checked DataV single-county source has 520 original vertices and differs from the current footprint by about 1.56 km2 symmetric difference; it has not been substituted into shared county boundaries.",
+    "Statistical area is not used to scale or reshape the boundary."
+  ]
+}

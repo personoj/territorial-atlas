@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "cities": [
+    {
+      "id": "xiaogan",
+      "name": "孝感市",
+      "adcode": 420900,
+      "parentId": "hubei",
+      "parentName": "湖北",
+      "image": "xiaogan-terrain-imagegen.png",
+      "geometry": "xiaogan-administration.geojson",
+      "extent": [
+        12605982.189545956,
+        3545456.429905476,
+        12761850.06247439,
+        3755314.0217974703
+      ],
+      "maxZoom": 13,
+      "focusExtent": [
+        12613681.558878984,
+        3553067.855970516,
+        12755682.154201783,
+        3744425.949616036
+      ],
+      "level": "city",
+      "provinceId": "hubei"
+    }
+  ],
+  "counties": [
+    {
+      "id": "yunmeng",
+      "name": "云梦县",
+      "adcode": 420923,
+      "level": "county",
+      "parentId": "xiaogan",
+      "parentName": "孝感市",
+      "provinceId": "hubei",
+      "image": "yunmeng-terrain-imagegen.png",
+      "geometry": "yunmeng-boundary.geojson",
+      "subdivisionOverlay": "yunmeng-township-overlay.geojson",
+      "extent": [
+        12647046.468584938,
+        3598244.7677998245,
+        12679238.497890532,
+        3662924.9674601727
+      ],
+      "focusExtent": [
+        12648971.022515744,
+        3601125.928274871,
+        12677357.181641405,
+        3660021.002026684
+      ],
+      "maxZoom": 14
+    }
+  ]
+}

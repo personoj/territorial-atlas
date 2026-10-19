@@ -41,5 +41,14 @@ https://github.com/nvkelso/natural-earth-vector/tree/master/geojson
 海域标签为显示用概略定位。周边图层用于环境示意，不取代正式地图审核。
 
 原始纹理在本地制作流程中保留；公开运行图经过仿射定位、地理边界透明裁切及尺寸重采样。
+孝感市贴图沿用现有湖北贴图的视觉风格，通过 imagegen 生成；制作参考包含孝感现有行政矢量、Mapzen Terrain Tiles 高程及用户提供的孝感规划参考图。规划分区、文字和发展轴线未写入底图纹理。生成 PNG 的原始像素与透明通道保持不变，通过运行配置定位并在 OpenLayers 绘制时按行政矢量轮廓裁切。制作与定位摘要见 assets/geo/xiaogan-texture.json。
+云梦县贴图使用 imagegen 生成，沿用孝感底图画风，依据独立核查县界、Mapzen Terrain Tiles 高程及用户提供的云梦规划参考图辅助制作，并修正首版过强的山脊表现。边界基线由现有 DataV 派生县界的共边面合并而来，覆盖范围不变；其数据来源及局限见 assets/geo/yunmeng-boundary-metadata.json，贴图生成与定位说明见 assets/geo/yunmeng-texture.json。地形、水系纹理为视觉示意，规划色块、发展轴线和文字保持独立。
+
+7. 云梦乡镇界线和名称：锐多宝中国五级行政区划平台。
+https://map.ruiduobao.com/
+https://github.com/ruiduobao/china-divisions-map
+提供方说明乡镇几何来自 2020 年普查资料；本次查询的区划目录年份为 2023 年。提供方限制商业用途，本项目按用户确认的非商用 demo 使用并保留来源。
+yunmeng-townships.geojson 保存 9 镇、3 乡及单列县经济开发区的来源面，几何坐标未平移、拉伸或拟合截图。yunmeng-township-overlay.geojson 为由其派生的内部边界及排版点，剔除重复外围线并按项目县界裁切显示，开发区使用虚线；不将开发区计作第 13 个乡镇。标签位于区域内部，不代表政府驻地。
+几何有效性及跨来源坐标一致性检查不等同官方勘界核准，年份、处理和局部接边差异见 assets/geo/yunmeng-townships-metadata.json。规划图“中心城市”不据此认定为某个乡镇行政范围。
 港澳主分区显示面按陆地轮廓裁切，避免把行政海面涂成陆地；没有分区覆盖的陆地保留纹理和省界，不推断所属分区。
 图层的小岛、海湾细节受生成分辨率与边界来源概化程度影响。来源及近似处理不构成权威行政或规划认定。

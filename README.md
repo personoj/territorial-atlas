@@ -82,6 +82,47 @@ const unsubscribe = map.on('mapclick', ({ coordinate }) => console.log(coordinat
 
 `map.getLoadingState()` 返回 `fullTextures / contextTextures / wantedFull / wantedContext / roles / targetReady` 等状态，便于宿主集成和验证。34张上下文图合计约2.37MB，对应完整图约14.18MB（减少83.31%，不包括共用底图、代码及矢量数据）。
 
+### 孝感市与云梦县下钻
+
+在湖北视图点击孝感市区域或地名，可平滑进入孝感市全域；在孝感视图点击云梦县区域或地名，可继续进入云梦县。也可直接打开 `/geographic.html#xiaogan` 或 `/geographic.html#yunmeng`，刷新会恢复当前层级。缩放和拖动保留当前选择；未配置详细地图的县域继续作为市级背景。
+
+页面已移除左上角层级导航。右侧工具栏保留放大、缩小和返回全国，在市县视图额外提供返回上级：云梦 → 孝感 → 湖北。点击当前县界之外、孝感以内的地区也可返回孝感。
+
+孝感专属贴图通过 imagegen 生成，以现有湖北贴图为风格参照，以孝感行政轮廓、Mapzen 高程参考及用户提供的孝感参考图辅助定位。运行时按真实的行政矢量轮廓裁切图像边缘，独立绘制孝南区、孝昌县、大悟县、云梦县、应城市、安陆市和汉川市的边界及名称。图层保留周边地域并淡化，规划分区和发展轴线留作独立专题叠加。
+
+`LocalDetailLayer` 复用于市、县两个层级，分别管理按需加载的贴图、边界、地名和加载状态。进入孝感后加载约 1.26MB 贴图及约 123KB 行政数据；进入云梦后再加载约 1.37MB 专属贴图和已核查的独立县界。县级贴图叠在市级底图上，保持周边空间连续；业务 GeoJSON 图层位于这些地图图层之上。
+
+`city-details.json` 的 `cities`、`counties` 分别记录市、县的父级、省份、贴图及定位范围；`xiaogan-texture.json` 和 `yunmeng-texture.json` 保存生成与配准说明。云梦使用内置 imagegen，以现有孝感图为风格参照、已核查县界及高程参考为位置约束，保留规划专题为独立图层。生成 PNG 原像素及透明通道不变，运行时按 `yunmeng-boundary.geojson` 裁切边缘。
+
+云梦县级视图叠加独立的乡镇界线与名称，覆盖 9 镇、3 乡，以及单独列出的县经济开发区。普通乡镇界用细实线，开发区界用虚线；不填充行政面，保持地形贴图可见。右侧图层按钮可整体隐藏或显示，关闭时恢复“云梦县”标签。标签使用区域内部点，仅用于排版，不表示政府驻地。
+
+`SubdivisionOverlay` 管理独立的界线和文字层，资源由县级配置的 `subdivisionOverlay` 指向；当前为 `yunmeng-township-overlay.geojson`，只在进入云梦时加载（约 306KB）。完整来源面保存在 `yunmeng-townships.geojson`（约 408KB，运行页面不额外请求），可用于后续替换和复核；来源年份、坐标核对、处理方式见 `yunmeng-townships-metadata.json`。显示线只保留内部界线，并裁切到现有县界，原始乡镇面和县界不做拉伸或平移。规划图中的“中心城市”不直接等同于城关镇或开发区。
+
+本次按用户确认的**非商用 demo**接入锐多宝公开乡镇矢量：提供方标称几何年份为 2020 年、查询目录为 2023 年。数据通过几何有效性、区域内标签及坐标一致性检查，尚未取得更新的官方勘界成果，不将其称为正式核准边界。提供方限制商业用途，来源署名与限制随项目保留。
+
+宿主接口：
+
+```ts
+map.fitCity('xiaogan');
+map.fitCounty('yunmeng');
+map.fitParent(); // 云梦 → 孝感 → 湖北 → 全国
+map.fitLocation('yunmeng', false); // 统一位置入口，可用于地址恢复
+map.on('navigationchange', (location) => console.log(location));
+map.on('citydetailchange', (detail) => console.log(detail.loading, detail.error));
+map.on('countydetailchange', (detail) => console.log(detail.loading, detail.error));
+map.getViewState().activeCityId;
+map.getViewState().activeCountyId;
+map.getLoadingState().cityDetail;
+map.getLoadingState().countyDetail;
+map.setTownships(false); // 独立隐藏乡镇界线和名称，保留县级地形与县界
+map.getLayerState().townships;
+map.getLayerState().townshipsAvailable;
+```
+
+`activeRegionId` 和 `regionchange` 继续表示父级省份；`navigationchange` 表示当前导航层级，`targetReady` 同时考虑选中的市县资料是否已准备完成。地点搜索的云梦结果通过 `focusPlace()` 进入对应县级贴图。
+
+乡镇图层同时遵循全局 `setLabels()`、`setBoundaries()`；独立开关不改变相机和当前层级。返回孝感、省域或全国时县级图层随导航退出，不覆盖上级视图。
+
 区域配置支持 `focusExtent`（EPSG:3857 默认取景范围）、`transitionZoom`、`maxZoom`、`cityFocusZoom` 和 `countyFocusZoom`。海南与台湾的默认取景聚焦主岛及近岸区域，远岛保持原始地理位置。缩放到不同大小的区域时，底图细节按该区域尺度渐显。
 
 窄窗口会根据省域实际取景缩放适配细节阈值，保留当前省的清晰度；全国取景允许视口超出中心移动范围，避免宽屏裁掉地图南北两端。静态纹理在相机移动过程中即可准备，首次可绘制后开始淡入。

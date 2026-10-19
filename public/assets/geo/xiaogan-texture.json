@@ -1,0 +1,42 @@
+{
+  "name": "孝感市地形贴图",
+  "generated": true,
+  "generator": "imagegen built-in",
+  "styleReference": "hubei-style-a-imagegen.webp",
+  "image": "xiaogan-terrain-imagegen.png",
+  "imageSize": [
+    1086,
+    1448
+  ],
+  "imageExtent": [
+    12605982.189545956,
+    3545456.429905476,
+    12761850.06247439,
+    3755314.0217974703
+  ],
+  "focusExtent": [
+    12613681.558878984,
+    3553067.855970516,
+    12755682.154201783,
+    3744425.949616036
+  ],
+  "projection": "EPSG:3857",
+  "alphaRegistrationScaleTranslation": [
+    1.012847768379034,
+    1.0030321091190524,
+    -1.6411569625953286,
+    9.109046384963127
+  ],
+  "outlineResidualPixelsP50P95": [
+    1.7045270336198899,
+    5.129138651708676
+  ],
+  "runtimeClip": "xiaogan-administration.geojson / 420900",
+  "terrainGuide": {
+    "source": "https://registry.opendata.aws/terrain-tiles/",
+    "zoom": 10,
+    "tileCount": 30
+  },
+  "administrationSource": "Existing hubei-cities.geojson and hubei-counties.geojson, DataV-derived",
+  "interpretation": "Imagegen physical terrain illustration matched to the existing Hubei artwork. Labels and administrative boundaries are independent vectors; planning overlays are not baked into the image."
+}

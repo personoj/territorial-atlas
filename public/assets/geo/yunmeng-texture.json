@@ -1,0 +1,42 @@
+{
+  "name": "云梦县地形贴图",
+  "generated": true,
+  "generator": "imagegen built-in",
+  "styleReference": "xiaogan-terrain-imagegen.png",
+  "image": "yunmeng-terrain-imagegen.png",
+  "imageSize": [
+    887,
+    1774
+  ],
+  "imageExtent": [
+    12647046.468584938,
+    3598244.7677998245,
+    12679238.497890532,
+    3662924.9674601727
+  ],
+  "focusExtent": [
+    12648971.022515744,
+    3601125.928274871,
+    12677357.181641405,
+    3660021.002026684
+  ],
+  "projection": "EPSG:3857",
+  "alphaRegistrationScaleTranslation": [
+    1.0062208336107954,
+    1.001613808664696,
+    -2.1632670433147014,
+    -1.1187096384384951
+  ],
+  "outlineResidualPixelsP50P95": [
+    1.2454570715162645,
+    3.3626200125860386
+  ],
+  "runtimeClip": "yunmeng-boundary.geojson / 420923",
+  "terrainGuide": {
+    "source": "https://registry.opendata.aws/terrain-tiles/",
+    "zoom": 12,
+    "tileCount": 32
+  },
+  "refinement": "Reduced excessive relief in the first generation to match the lowland reference. Original output pixels and transparency are preserved.",
+  "interpretation": "Illustrative imagegen terrain matched to the existing atlas; official planning overlays and labels are not baked into the texture."
+}
