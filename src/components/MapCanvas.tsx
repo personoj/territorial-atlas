@@ -2,18 +2,16 @@ import type { RefObject } from "react";
 
 interface Props {
   containerRef: RefObject<HTMLElement | null>;
-  onInteract: () => void;
+  locationName: string;
 }
 
-export function MapCanvas({ containerRef, onInteract }: Props) {
+export function MapCanvas({ containerRef, locationName }: Props) {
   return (
     <main
       id="geographic-map"
       ref={containerRef}
       tabIndex={0}
-      aria-label="可连续缩放和拖动的省域地理地图"
-      onPointerDown={onInteract}
-      onWheel={onInteract}
+      aria-label={`${locationName}地图，点击省份切换，支持缩放和拖动`}
     />
   );
 }

@@ -5,7 +5,6 @@ import "./styles/base.css";
 import "./styles/map.css";
 import "./styles/attribution.css";
 import "./styles/controls.css";
-import "./styles/dialog.css";
 import { App } from "./app/App";
 
 createRoot(document.getElementById("root")!).render(

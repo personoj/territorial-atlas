@@ -97,7 +97,7 @@ export class GeographicPlanningMap extends EventTarget {
   private showPlanning = true;
   private original = false;
   private reduced: boolean;
-  private explicitNavigation = false;
+  private readonly attribution = createMapAttribution();
   private detailMix = 0;
   private activeRegion: RegionInfo | null = null;
   private regions: RegionDefinition[] = [];
@@ -148,8 +148,6 @@ export class GeographicPlanningMap extends EventTarget {
   private labelLayer!: VectorLayer<VectorSource<PlaceFeature>>;
   private businessSource!: VectorSource<MapFeature>;
   private businessLayer!: VectorLayer<VectorSource<MapFeature>>;
-  private releaseNavigationTarget: () => void;
-  private handleNavigationKey: (event: KeyboardEvent) => void;
   places: PlaceFeature[] = [];
 
   on<K extends keyof MapEvents>(
@@ -193,48 +191,16 @@ export class GeographicPlanningMap extends EventTarget {
       pixelRatio: Math.min(devicePixelRatio, 2),
     });
     this.map.addControl(new ScaleLine({ units: "metric", minWidth: 90 }));
-    this.map.addControl(createMapAttribution());
+    this.map.addControl(this.attribution);
     this.map.on("moveend", () => {
-      this.syncActiveRegion();
+      // Camera movement changes visible detail, never the explicitly selected province.
       this.refreshVisibleRegions();
       this.emit("viewchange", this.getViewState());
     });
     this.map.on("singleclick", (e) => this.handleClick(e));
-    // A fitted province can be concave: its bounding-box center need not lie inside it.
-    // Preserve the requested destination until a real map gesture changes the view.
-    this.releaseNavigationTarget = () => {
-      this.explicitNavigation = false;
-    };
-    this.map.on("pointerdrag", this.releaseNavigationTarget);
-    this.map.on("dblclick", this.releaseNavigationTarget);
-    this.target.addEventListener("wheel", this.releaseNavigationTarget, {
-      passive: true,
-      capture: true,
-    });
-    this.handleNavigationKey = (e) => {
-      if (
-        [
-          "ArrowUp",
-          "ArrowDown",
-          "ArrowLeft",
-          "ArrowRight",
-          "+",
-          "-",
-          "=",
-        ].includes(e.key)
-      )
-        this.releaseNavigationTarget();
-    };
-    this.target.addEventListener("keydown", this.handleNavigationKey);
     this.map.on("pointermove", (e) => {
       if (e.dragging) return;
-      const hit = this.map.forEachFeatureAtPixel(e.pixel, (f) => f, {
-        layerFilter: (l) =>
-          l === this.labelLayer ||
-          l === this.cityMarkerLayer ||
-          l === this.provinceLayer,
-        hitTolerance: 3,
-      });
+      const hit = this.clickableProvince(e.pixel, e.coordinate);
       target.style.cursor = hit ? "pointer" : "grab";
     });
     this.observer = new ResizeObserver(() => {
@@ -581,6 +547,7 @@ export class GeographicPlanningMap extends EventTarget {
       this.map.once("rendercomplete", complete);
       this.map.renderSync();
     });
+    this.attribution.showIntro();
     this.emit("ready", { ...meta, regions: this.getRegions() });
     return this;
   }
@@ -1206,42 +1173,41 @@ export class GeographicPlanningMap extends EventTarget {
   }
 
   handleClick(e: { pixel: Pixel; coordinate: Coordinate }) {
-    const label = this.map.forEachFeatureAtPixel(e.pixel, (f) => f, {
-      layerFilter: (l) => l === this.labelLayer || l === this.cityMarkerLayer,
-      hitTolerance: 5,
-    });
-    if (label) {
-      this.focusPlace(label as PlaceFeature);
-      return;
-    }
-    const province = this.provinceAt(e.coordinate);
+    const province = this.clickableProvince(e.pixel, e.coordinate);
     if (province) {
-      const region = this.regionsByAdcode.get(Number(province.get("adcode")));
-      if (
-        !region ||
-        this.activeRegion?.id !== region.id ||
-        (this.view.getZoom() ?? 4) < 5.9 + this.regionZoomOffset(region)
-      ) {
-        this.fitProvince(province);
-        return;
-      }
-      const area = this.citySource
-        .getFeaturesAtCoordinate(e.coordinate)
-        .find((f) => f.get("regionId") === region.id);
-      const place =
-        area &&
-        this.cityPlaceByCode.get(placeKey(region.id, area.get("adcode")));
-      if (place) {
-        this.focusPlace(place);
-        return;
-      }
-      this.fitRegion(region.id);
+      this.fitProvince(province);
       return;
     }
     this.emit("mapclick", { coordinate: toLonLat(e.coordinate) });
   }
   provinceAt(coordinate: Coordinate) {
-    return this.provinceSource?.getFeaturesAtCoordinate(coordinate)[0];
+    return this.provinceSource
+      ?.getFeaturesAtCoordinate(coordinate)
+      .find((feature) =>
+        this.regionsByAdcode.has(Number(feature.get("adcode"))),
+      );
+  }
+  private clickableProvince(pixel: Pixel, coordinate: Coordinate) {
+    const province = this.provinceAt(coordinate);
+    if (province) return province;
+    // Text may extend beyond a coastline or a tiny island. Its hit area selects
+    // the same province as its geography, rather than starting a city drill-down.
+    return this.map.forEachFeatureAtPixel(
+      pixel,
+      (feature) => {
+        const region =
+          this.regionsById.get(feature.get("regionId")) ||
+          this.regionsByAdcode.get(Number(feature.get("adcode")));
+        return region ? this.provinceByCode.get(region.adcode) : undefined;
+      },
+      {
+        layerFilter: (layer) =>
+          layer === this.labelLayer ||
+          layer === this.cityMarkerLayer ||
+          layer === this.provinceLayer,
+        hitTolerance: 3,
+      },
+    );
   }
   regionForProvince(feature?: MapFeature): RegionInfo | null {
     if (!feature) return null;
@@ -1273,56 +1239,6 @@ export class GeographicPlanningMap extends EventTarget {
       );
     this.refreshVisibleRegions();
   }
-  syncActiveRegion() {
-    if (!this.provinceSource || this.explicitNavigation) return;
-    const centered = this.regionForProvince(
-      this.provinceAt(this.view.getCenter()!),
-    );
-    const definition = centered && this.regionsById.get(centered.id);
-    const next =
-      (this.view.getZoom() ?? 4) <
-      (definition
-        ? (this.effectiveTransitions.get(definition.id)?.[0] ??
-          definition.transitionZoom?.[0] ??
-          5.6)
-        : 5.6)
-        ? null
-        : centered;
-    // Require the center to move a little into the new province before changing focus.
-    // This hysteresis prevents repeated border emphasis flips from tiny pan/zoom adjustments.
-    if (
-      next &&
-      this.activeRegion?.available &&
-      next.id !== this.activeRegion.id
-    ) {
-      const current = this.regionsById.get(this.activeRegion.id);
-      const geometry =
-        current && this.provinceByCode.get(current.adcode)?.getGeometry();
-      if (geometry) {
-        const center = this.view.getCenter()!,
-          closest = geometry.getClosestPoint(center);
-        if (
-          Math.hypot(center[0] - closest[0], center[1] - closest[1]) <
-          (this.view.getResolution() || 1) * 24
-        )
-          return;
-      }
-    }
-    const changed = this.activeRegion?.id !== next?.id;
-    this.setActiveRegion(next);
-    if (changed)
-      this.emit(
-        "locationchange",
-        next
-          ? {
-              id: next.id,
-              name: next.name,
-              adcode: next.adcode,
-              level: "province",
-            }
-          : { id: "national", name: "全国", adcode: 100000, level: "national" },
-      );
-  }
   duration(animate = true) {
     return animate && !this.reduced ? 1150 : 0;
   }
@@ -1339,7 +1255,6 @@ export class GeographicPlanningMap extends EventTarget {
     const region = this.regionsById.get(id),
       province = region && this.provinceByCode.get(region.adcode);
     if (!province) return false;
-    this.explicitNavigation = true;
     this.setActiveRegion(region!);
     this.primeRegion(region!);
     this.fitExtent(
@@ -1359,7 +1274,6 @@ export class GeographicPlanningMap extends EventTarget {
     return this.fitRegion("hubei", animate);
   }
   fitNational(animate = true) {
-    this.explicitNavigation = true;
     this.setActiveRegion(null);
     this.fitExtent(
       transformExtent([73, 16.8, 135.2, 54], "EPSG:4326", "EPSG:3857"),
@@ -1376,7 +1290,6 @@ export class GeographicPlanningMap extends EventTarget {
     const region = this.regionForProvince(feature);
     if (!region) return false;
     if (region.available) return this.fitRegion(region.id, animate);
-    this.explicitNavigation = true;
     this.setActiveRegion(region);
     this.fitExtent(feature.getGeometry()!.getExtent(), animate);
     this.emit("locationchange", { ...region, level: "province" });
@@ -1409,7 +1322,6 @@ export class GeographicPlanningMap extends EventTarget {
       return;
     }
     const region = this.regionsById.get(feature.get("regionId"));
-    this.explicitNavigation = true;
     if (region) this.setActiveRegion(region);
     if (region) this.primeRegion(region);
     this.view.cancelAnimations();
@@ -1518,7 +1430,6 @@ export class GeographicPlanningMap extends EventTarget {
     };
   }
   zoomBy(delta: number) {
-    this.releaseNavigationTarget();
     this.view.cancelAnimations();
     this.view.animate({
       zoom: Math.max(
@@ -1560,12 +1471,7 @@ export class GeographicPlanningMap extends EventTarget {
       resource.texture?.dispose();
       resource.context?.dispose();
     }
-    this.target.removeEventListener(
-      "wheel",
-      this.releaseNavigationTarget,
-      true,
-    );
-    this.target.removeEventListener("keydown", this.handleNavigationKey);
+    this.attribution.dispose();
     this.observer.disconnect();
     this.view.cancelAnimations();
     this.map.setTarget(undefined);

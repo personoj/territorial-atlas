@@ -1,51 +1,75 @@
 .atlas-map-attribution.ol-attribution {
   left: 24px;
   right: auto;
-  bottom: 55px;
-  max-width: calc(100vw - 48px);
-  padding: 3px 7px;
-  border: 1px solid #d6dfcb99;
-  border-radius: 4px;
-  background: #fffff7de;
+  bottom: 46px;
+  padding: 0;
+  background: none;
   color: #6d7b66;
   font:
-    10px/1.5 "Microsoft YaHei",
+    11px/1.65 "Microsoft YaHei",
     sans-serif;
   text-align: left;
 }
-.atlas-map-attribution.ol-attribution ul {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  max-width: none;
+.atlas-map-attribution.ol-attribution button {
+  width: 24px;
+  height: 24px;
+  margin: 0;
   padding: 0;
+  border-radius: 50%;
+  background: #fffff7b3;
+  color: #71826a;
+  font:
+    17px/24px "Microsoft YaHei",
+    sans-serif;
+  cursor: pointer;
+}
+.atlas-map-attribution.ol-attribution button:hover {
+  background: #fffff7;
+  color: #35533e;
+}
+.atlas-map-attribution.ol-attribution button:focus-visible,
+.atlas-map-attribution a:focus-visible {
+  outline: 2px solid #477857;
+  outline-offset: 2px;
+}
+.atlas-map-attribution.ol-attribution ul {
+  position: absolute;
+  left: 0;
+  bottom: 32px;
+  display: block;
+  box-sizing: border-box;
+  width: min(360px, calc(100vw - 48px));
+  max-height: min(300px, calc(100vh - 110px));
+  overflow: auto;
+  margin: 0;
+  padding: 12px 15px;
+  border: 1px solid #d6dfcb;
+  border-radius: 6px;
+  background: #fffff9f5;
+  box-shadow: 0 4px 18px #30452d1a;
   color: inherit;
   text-shadow: none;
   font: inherit;
 }
+.atlas-map-attribution.ol-collapsed ul {
+  display: none;
+}
+.atlas-map-attribution.ol-attribution li {
+  display: block;
+  padding: 0;
+}
 .atlas-map-attribution a {
   color: #5c7053;
 }
-.atlas-map-attribution li {
-  padding: 0;
-}
-.atlas-attribution-details summary {
-  cursor: pointer;
-  white-space: nowrap;
-}
-.atlas-attribution-sources {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 0;
-  box-sizing: border-box;
-  width: min(390px, calc(100vw - 48px));
-  padding: 10px 13px;
-  border: 1px solid #d6dfcb;
-  border-radius: 5px;
-  background: #fffff9f5;
-  box-shadow: 0 4px 18px #30452d1a;
-  font-size: 11px;
+.atlas-attribution-sources strong {
+  font-weight: 600;
 }
 .atlas-attribution-sources p {
-  margin: 5px 0;
+  margin: 6px 0 0;
+}
+@media (max-width: 600px) {
+  .atlas-map-attribution.ol-attribution {
+    left: 14px;
+    bottom: 43px;
+  }
 }

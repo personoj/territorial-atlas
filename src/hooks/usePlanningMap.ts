@@ -1,28 +1,18 @@
 import { useEffect, useState, type RefObject } from "react";
 import { GeographicPlanningMap } from "../map";
-import type { MapLayerState, MapViewState } from "../map";
+import type { MapViewState } from "../map";
 import { MAP_ASSET_BASE } from "../config/assets";
-
-const initialLayers: MapLayerState = {
-  labels: true,
-  boundaries: true,
-  planning: true,
-  original: false,
-  originalAvailable: false,
-};
 
 /** Owns the map lifetime; React renders UI without driving individual map frames. */
 export function usePlanningMap(container: RefObject<HTMLElement | null>) {
   const [map, setMap] = useState<GeographicPlanningMap | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [locationName, setLocationName] = useState("全国");
-  const [layers, setLayers] = useState(initialLayers);
 
   useEffect(() => {
     if (!container.current) return;
     setMap(null);
     setError(null);
-    setLayers(initialLayers);
     setLocationName("全国");
     delete document.body.dataset.ready;
     delete document.body.dataset.error;
@@ -49,7 +39,6 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
           instance.on("locationchange", (detail) =>
             setLocationName(detail.name),
           ),
-          instance.on("layerchange", setLayers),
           instance.on("viewchange", updateView),
           instance.on("asseterror", (detail) => {
             // Keep the navigable national map when a single optional detail fails.
@@ -66,7 +55,6 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
               "",
               `${location.pathname}${location.search}#${id}`,
             );
-            setLayers(instance.getLayerState());
           }),
         );
         const onHashChange = () => restoreHash(window.location.hash.slice(1));
@@ -75,7 +63,6 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
           window.removeEventListener("hashchange", onHashChange),
         );
         restoreHash(initialRegion, false);
-        setLayers(instance.getLayerState());
         updateView(instance.getViewState());
         setMap(instance);
         document.body.dataset.ready = "true";
@@ -98,5 +85,5 @@ export function usePlanningMap(container: RefObject<HTMLElement | null>) {
     };
   }, [container]);
 
-  return { map, error, locationName, layers, loading: !map && !error };
+  return { map, error, locationName, loading: !map && !error };
 }

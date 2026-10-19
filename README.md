@@ -1,6 +1,6 @@
 # 灰绿山水 · 全国省域连续地图
 
-React + TypeScript + Vite 前端工程，OpenLayers 负责连续地理渲染。接入全国34个省级区域的 imagegen 透明贴图、主分区与市县标签，支持缩放、拖动、区域点击和地点搜索。北京市、天津市、上海市、重庆市及港澳使用区县／堂区作为主分区。
+React + TypeScript + Vite 前端工程，OpenLayers 负责连续地理渲染。接入全国34个省级区域的 imagegen 透明贴图、主分区与市县标签，支持点击省域、缩放和拖动。北京市、天津市、上海市、重庆市及港澳使用区县／堂区作为主分区。
 
 ## 开发与构建
 
@@ -26,10 +26,10 @@ npm run preview  # 预览构建产物；先停止同端口的开发服务器
 ```text
 src/
   app/          页面组合与 React 状态
-  components/   搜索框、图层面板、工具栏、地图容器等界面组件
-  hooks/        地图生命周期、导航状态与搜索交互
+  components/   精简工具栏和地图容器
+  hooks/        地图生命周期与导航状态
   map/          独立 TypeScript 地图引擎、制图样式和类型
-  styles/       界面 CSS，按基础、地图、控件和弹窗划分
+  styles/       界面 CSS，按基础、地图、控件和署名划分
   config/       资源入口等应用配置
   entries/      独立嵌入入口
 public/
@@ -72,9 +72,11 @@ const unsubscribe = map.on('mapclick', ({ coordinate }) => console.log(coordinat
 
 地址片段支持 `national` 和各省 ID，例如 `hubei / sichuan / shanghai / xinjiang / tibet / taiwan / hong-kong / macau`；完整列表见 `public/assets/geo/regions-style-a.json`。所有影像共用同一坐标视图，市县边界、文字和标记独立绘制。
 
-全国首载读取底图、区域配置与轻量地点索引 `places-style-a.json`。当前省请求完整纹理、市界及按缩放出现的县界；可视近邻省只请求720px透明上下文图，淡化至约28%，远处保留全国简底。省界使用浅色衬线和灰绿主线，焦点交接渐变450ms，并以中心穿越迟滞减轻边界处反复切换。
+点击整块省域即可选中并平滑聚焦，点击地名也可选择所属省份。选中状态不受缩放或拖动影响；点击其他省、返回全国，或宿主显式调用导航接口才会改变选择。右上角只保留放大、缩小和返回全国，页面保留独立地名与轻量比例尺。
 
-近邻表依据实际几何距离（60km内、最多8省）预计算，再按视口筛选；`contextImage` 与 `neighbors` 字段位于区域注册表中。资源并发最多3个，离屏缓存目标8个区域，可见图层受保护。已访问的完整图可直接作为淡化上下文复用；未访问邻省不会因此下载完整图或市县面。未访问省份的城市也可直接搜索，台湾地名同时支持常见简体输入。
+全国首载读取底图、区域配置与轻量地点索引 `places-style-a.json`。当前省请求完整纹理、市界及按缩放出现的县界；可视近邻省只请求720px透明上下文图，淡化至约28%，远处保留全国简底。省界使用浅色衬线和灰绿主线，焦点交接渐变450ms。渐进加载根据缩放和可视范围更新，与省份选择状态分离。
+
+近邻表依据实际几何距离（60km内、最多8省）预计算，再按视口筛选；`contextImage` 与 `neighbors` 字段位于区域注册表中。资源并发最多3个，离屏缓存目标8个区域，可见图层受保护。已访问的完整图可直接作为淡化上下文复用；未访问邻省不会因此下载完整图或市县面。宿主可通过 `search()` 和 `focusPlace()` 自行接入地点搜索，台湾地名同时支持常见简体输入；演示页面不提供搜索面板。
 
 `map.getLoadingState()` 返回 `fullTextures / contextTextures / wantedFull / wantedContext / roles / targetReady` 等状态，便于宿主集成和验证。34张上下文图合计约2.37MB，对应完整图约14.18MB（减少83.31%，不包括共用底图、代码及矢量数据）。
 
@@ -92,7 +94,7 @@ Git 跟踪源码、构建配置、依赖锁文件及运行资源。`dist/`、`no
 
 ## 资源与许可
 
-地图纹理由 imagegen 生成，大多数行政区划来自 DataV，台湾分区来自国土测绘中心开放资料；香港陆地轮廓参考地政总署海面数据，澳门与海南主岛海岸线来自 OpenStreetMap / Geofabrik。地形与河湖位置参考 Natural Earth、Mapzen Terrain Tiles。资料署名与数据许可见 `public/licenses/map-data-sources.txt`；地图引擎包含共享署名控件，嵌入时应保留。
+地图纹理由 imagegen 生成，大多数行政区划来自 DataV，台湾分区来自国土测绘中心开放资料；香港陆地轮廓参考地政总署海面数据，澳门与海南主岛海岸线来自 OpenStreetMap / Geofabrik。地形与河湖位置参考 Natural Earth、Mapzen Terrain Tiles。资料署名与数据许可见 `public/licenses/map-data-sources.txt`；地图引擎包含共享署名控件，嵌入时应保留。启动时展示来源，5秒后或开始操作地图时收起为左下角的 ⓘ；点击入口可再次展开。
 
 生成地形和水系为视觉示意，不能用于位置测量或规划判读。贴图与边界采用不同来源和精度，小岛与海湾仍受生成分辨率影响；某些台湾标签使用区域内部点，不代表政府驻地坐标。湖北原图对照的来源保存在 `public/assets/geo/manifest.json`。
 
